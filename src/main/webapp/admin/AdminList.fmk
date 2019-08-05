@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>管理员列表 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <#if !(info??)>
+        <div class="alert alert-danger alert-middle">
+            <span class="fa fa-warning"></span>
+            <strong>数据错误!</strong>&nbsp;&nbsp;请联系管理员或者重试 。
+        </div>
+</div>
+</body>
+</html>
+${info}
+</#if>
+    <div class="item categoryCon row">
+        <#if message??>
+            <div class="col-sm-12 m-b">
+                <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    ${message!}
+                </div>
+            </div>
+        </#if>
+        <div class="col-sm-12 m-b">
+            <div class="alert alert-dismissable alert-info ">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                <span class="ml-15"> 提示：<b>超级管理员</b> 可以修改系统配置与店铺 &nbsp; <b>店铺管理员</b> 可以管理指定店铺，不可查看系统配置 </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 m-b">
+                <div class="col-sm-2">
+                    <a class="btn btn-primary addNew"  href="/${ad!}/addAdmin${ext!}" >添加管理员</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                            <table class="table table-striped table-hover centerTableStyle">
+                                <thead>
+                                <tr>
+                                    <th >序号</th>
+                                    <th >用户名</th>
+                                    <th >密码</th>
+                                    <th>昵称</th>
+                                    <th >手机</th>
+                                    <th >邮箱</th>
+                                    <th >角色</th>
+                                    <th >上次登录IP</th>
+                                    <th >上次登录地点</th>
+                                    <th >上次登录时间</th>
+                                    <th >所属店铺</th>
+                                    <th >操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <#if (info.page.getList())?? && info.page.getList().size() gt 0>
+                                    <#list info.page.getList() as item>
+                                        <tr>
+                                            <td >${item.id!}</td>
+                                            <td >
+                                                ${item.username!}
+                                            </td>
+                                            <td >
+                                                ${item.getTruePassword()!}
+                                            </td>
+                                            <td>
+                                                ${item.realName!}
+                                            </td>
+                                            <td>
+                                                ${item.phone!}
+                                            </td>
+                                            <td>
+                                                ${item.email!}
+                                            </td>
+                                            <td>
+                                                <#if item.role=0>
+                                                    <span class="label label-primary">超级管理员</span>
+                                                    <#else>
+                                                        <span class="label ">分店管理员</span>
+                                                </#if>
+                                            </td>
+                                            <td>
+                                                ${item.getLastLoginIpString()!}
+                                            </td>
+                                            <td>
+                                                ${item.lastLoginArea!}
+                                            </td>
+                                            <td>
+                                                ${item.lastLoginTime!}
+                                            </td>
+                                            <td>
+                                                ${item.getShopName()!}
+                                            </td>
+                                            <td>
+                                                <a href="/${ad!}/addAdmin/${item.id!}${ext!}" >修改</a>&nbsp;&nbsp;
+                                                <a href="javascript:void(0);" data-url="/${ad!}/doDeleteAdmin/${item.id!}${ext!}" onclick="deleteItem(this)">删除</a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                    <#else>
+                                        <tr><td colspan="12" >暂无记录</td></tr>
+                                </#if>
+                                </tbody>
+                            </table>
+                            <div class="separator"></div>
+                            <div class="row">
+                                <div class="col-sm-12 text-right">
+                                    <#include "/admin/common/Paginate.fmk" />
+                                    <@paginate currentPage=info.page.getPageNumber()
+                                    totalPage=info.page.getTotalPage() sizePage=info.page.getPageSize()
+                                    totalRow=info.page.getTotalRow() actionUrl="/${ad!}/adminList"
+                                    ext = ext
+                                    urlParas="-${info.searchType!'n1'}-${info.searchKey!''}-${info.startTime!''}-${info.endTime!''}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    $(function () {
+
+    });
+
+    function showMsg(msg){
+        parent.layer.msg(msg);
+    }
+
+    function deleteItem(obj){
+        //询问框
+        var deleteEle = $(obj);
+        parent.layer.confirm('确定要删除管理员吗？', {
+            btn: ['确定','取消'], //按钮
+            shade: [0.2,'#000']
+        }, function(){
+            parent.layer.close(parent.layer.index);
+            //删除
+            window.location = deleteEle.attr("data-url");
+        }, function(){
+        });
+        return false;
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

@@ -1,0 +1,149 @@
+<#macro paginate currentPage totalPage sizePage totalRow actionUrl ext urlParas="" >
+    <style type="text/css">
+        .pagination_bar {
+            margin: 3px 0;
+        }
+
+        .pagination_bar .page_info {
+            display: inline-block;
+            height: 36px;
+            line-height: 36px;
+            vertical-align: top;
+            margin-right: 20px;
+        }
+
+        .pagination_bar .page_body {
+            display: inline-block;
+        }
+
+        .separator {
+            height: 1px;
+            border-bottom: 1px solid #FFFFFF !important;
+            border-top: 1px solid #E7E7E7 !important;
+            color: #555555 !important;
+            margin: 10px 0 30px;
+        }
+
+        .pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 4px 0;
+            border-radius: 4px;
+        }
+    </style>
+
+    <#if (totalPage <= 0) || (currentPage > totalPage)>
+    <div class="pagination_bar">
+        <span class="page_info"><#if totalRow==0 ><span class="text-danger">当前没有记录！</span></#if> 共 ${totalRow!} 条记录 &nbsp;${currentPage!}/${totalPage} 页</span>
+        <span class="dataTables_paginate paging_bs_full page_body">
+            <ul class="pagination">
+                <li class="disabled"><a tabindex="0" class="paginate_button previous">&larr; 上一页</a></li>
+                <li class="disabled"><a tabindex="0">1</a></li>
+                <li class="disabled"><a tabindex="0" class="paginate_button next">&larr; 下一页</a></li>
+            </ul>
+        </span>
+        <div class="clearfix"></div>
+    </div>
+    <#return></#if>
+
+<#local startPage = currentPage - 4>
+    <#if (startPage < 1)><#local startPage = 1></#if>
+
+    <#local endPage = currentPage + 4>
+        <#if (endPage > totalPage)><#local endPage = totalPage></#if>
+    <div class="pagination_bar">
+        <span class="page_info"><#if totalRow==0 ><span class="text-danger">当前没有记录！</span></#if> 共 ${totalRow!} 条记录 &nbsp;${currentPage!}/${totalPage} 页</span>
+        <span class="dataTables_paginate paging_bs_full page_body">
+            <ul class="pagination">
+            <#if (currentPage <= 8)>
+            <#local startPage = 1>
+                </#if>
+                <#if ((totalPage - currentPage) < 8)>
+                <#local endPage = totalPage>
+                    </#if>
+
+                    <#if (currentPage == 1)>
+                        <li class="disabled">
+                            <a class="paginate_button previous">
+                                &larr; Prev
+                            </a>
+                        </li>
+                        <#else>
+                            <li>
+                                <a href="${actionUrl}/#{currentPage - 1}${urlParas!}${ext!}"
+                                   class="paginate_button previous">
+                                    &larr; Prev
+                                </a>
+                            </li>
+                    </#if>
+
+                    <#if (currentPage > 8)>
+                        <li>
+                            <a href="${actionUrl}/#{1}${urlParas!}${ext!}">
+                                #{1}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="${actionUrl}/#{2}${urlParas!}${ext!}">
+                                #{2}
+                            </a>
+                        </li>
+                        <li>
+                            <a >
+                                ...
+                            </a>
+                        </li>
+                    </#if>
+
+                    <#list startPage..endPage as i>
+                        <#if currentPage == i>
+                            <li class="active">
+                                <a >
+                                    #{i}
+                                </a>
+                            </li>
+                            <#else>
+                                <li>
+                                    <a href="${actionUrl}/#{i}${urlParas!}${ext!}">
+                                        #{i}
+                                    </a>
+                                </li>
+                        </#if>
+                    </#list>
+
+                    <#if ((totalPage - currentPage) >= 8)>
+                        <li>
+                            <a>
+                                ...
+                            </a>
+                        </li>
+                        <li>
+                            <a href="${actionUrl}/#{totalPage - 1}${urlParas!}${ext!}">
+                                #{totalPage - 1}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="${actionUrl}/#{totalPage}${urlParas!}${ext!}">
+                                #{totalPage}
+                            </a>
+                        </li>
+                    </#if>
+
+                    <#if (currentPage == totalPage)>
+                        <li class="disabled">
+                            <a class="paginate_button next">
+                                Next &rarr;
+                            </a>
+                        </li>
+                        <#else>
+                            <li>
+                                <a href="${actionUrl}/#{currentPage + 1}${urlParas!}${ext!}" class="paginate_button next">
+                                    Next &rarr;
+                                </a>
+                            </li>
+                    </#if>
+        </ul>
+        </span>
+    <div class="clearfix"></div>
+    </div>
+</#macro>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>添加/编辑商铺 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" type="text/css" href="/admin/assets/css/plugins/webuploader/webuploader.css">
+    <style type="text/css">
+        .modifyPicture{
+            display: inline-block;
+            height: 50px;
+            margin-left: 40px;
+        }
+        #pictureUploader{
+            width: 160px;
+            display: inline-block;
+        }
+        #pictureUploader  .webuploader-pick {
+            position: relative;
+            font-size: 16px;
+            background: #00b7ee;
+            border-radius: 3px;
+            line-height: 34px;
+            padding: 0 10px;
+            color: #fff;
+            display: inline-block;
+            cursor: pointer;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+            margin-left: 26px;
+        }
+    </style>
+</head>
+<body>
+    <form action="/${ad!}/doAddShop${ext!}" name="modifyForm" id="modifyForm" method="post">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="items row">
+                <#if message??>
+                    <div class="col-sm-12 m-b">
+                        <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                            ${message!}
+                        </div>
+                    </div>
+                </#if>
+                <dl class="col-sm-12">
+                    <dt>店铺名称</dt>
+                    <dd>
+                        <#if modify??>
+                            <input type="hidden" value="${modify.id!}" name="shop.id">
+                        </#if>
+                        <input class="input normal" type="text" name="shop.name" value="<#if modify??>${modify.name!}</#if>" required>
+                        <span class="kong"></span>
+                        <span class="Validform_checktip Validform_wrong"></span>
+                    </dd>
+                </dl>
+            <dl class="col-sm-12">
+                <dt>是否启用</dt>
+                <dd>
+                    <div class="switch cell-block">
+                        <div class="onoffswitch">
+                            <input type="checkbox" <#if modify?? && (modify.isActive)>checked</#if> value="true" class="onoffswitch-checkbox" id="isActive" name="shop.isActive">
+                        <label class="onoffswitch-label" for="isActive">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+        </div>
+        <div class="cell-block">
+            <span class="kong"></span>
+            <span class="Validform_checktip Validform_wrong">  </span>
+        </div>
+        </dd>
+        </dl>
+        <dl class="col-sm-12">
+            <dt>门头照片：</dt>
+            <dd>
+                <input type="hidden" id="picture" value="" name="shop.picture">
+                <div id="pictureUploader">
+                    <div class="queueList">
+                        <div id="pictureFilePicker"></div>
+                    </div>
+                </div>
+                <span class="kong"></span>
+                <span class="Validform_checktip Validform_wrong">推荐1080*452，不超过300K </span>
+                <#if modify?? && modify.picture??>
+                <div class="modifyPicture"><img src="${modify.picture}" height="100%"/></div>
+            </#if>
+            </dd>
+        </dl>
+            <dl class="col-sm-12">
+                <dt>介绍</dt>
+                <dd>
+                    <textarea class="input normal" rows="5" style="width: 300px;" name="shop.summary"><#if modify??>${modify.summary!}</#if></textarea>
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong">  </span>
+                </dd>
+            </dl>
+            <dl class="col-sm-12">
+                <dt>公告</dt>
+                <dd>
+                    <textarea class="input normal" rows="5" style="width: 300px;" name="shop.notice"><#if modify??>${modify.notice!}</#if></textarea>
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong">  </span>
+                </dd>
+            </dl>
+            <dl class="col-sm-12">
+                <dt>联系方式</dt>
+                <dd>
+                    <input class="input normal" type="text" name="shop.phone" value="<#if modify??>${modify.phone!}</#if>">
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong"> </span>
+                </dd>
+            </dl>
+            <dl class="col-sm-12">
+                <dt>地址</dt>
+                <dd>
+                    <input class="input normal" type="text" name="shop.address" value="<#if modify??>${modify.address!}</#if>">
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong"> </span>
+                </dd>
+            </dl>
+
+                <dl class="col-sm-12">
+                    <dt></dt>
+                    <dd>
+                        <button class="btn btn-success" type="submit">提交保存</button>
+                        <input type="button" value="返回" class="btn btn-default" onclick="goback()">
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<!-- Web Uploader -->
+<script type="text/javascript">
+    // 添加全局站点信息
+    var BASE_URL = '/admin/assets/js/plugins/webuploader';
+</script>
+<script src="/admin/assets/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="/admin/assets/js/webuploader-picture-upload.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".hintIcon").mouseover(function () {
+            $(this).next(".hintTxt").fadeIn();
+        }).mouseout(function () {
+            $(this).next(".hintTxt").fadeOut();
+        });
+    });
+
+    $(".searchSelectItem").click(function () {
+        var ele = $(this);
+        $("#searchType").val(ele.attr("data-id"));
+        $("#searchSelect").html(ele.attr("data-name")+" <span class=\"caret\"></span>");
+    });
+
+    function goback(){
+        window.location = "/${ad!}/workerList${ext!}";
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

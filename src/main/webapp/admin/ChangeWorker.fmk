@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>转换员工 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" type="text/css" href="/admin/assets/css/plugins/webuploader/webuploader.css">
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <form action="/${ad!}/doChangeWorker${ext!}" name="modifyForm" id="modifyForm" method="post">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="items row">
+                <#if message??>
+                    <div class="col-sm-12 m-b">
+                        <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                            ${message!}
+                        </div>
+                    </div>
+                </#if>
+            <dl class="col-sm-12">
+                <dt>用户名</dt>
+                <dd>
+                    <input type="hidden" value="${user.id!}" name="id">
+                    <input class="input normal readonly" readonly type="text" name="username" value="${user.username!}">
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong"></span>
+                </dd>
+            </dl>
+        <dl class="col-sm-12">
+            <dt>所在店铺</dt>
+            <dd>
+                <select name="shopId" class="form-control form-item">
+                    <#list shopList as item>
+                    <option value="${item.id}"
+                    >${item.name!}</option>
+                </#list>
+            </select>
+            <span class="kong"></span>
+            <span class="Validform_checktip Validform_wrong"> </span>
+            </dd>
+        </dl>
+        <dl class="col-sm-12">
+            <dt>提成比例</dt>
+            <dd>
+                <input class="input normal" type="text" name="royaltyRate" value="20">%
+                <span class="kong"></span>
+                <span class="Validform_checktip Validform_wrong"> 提成百分比</span>
+            </dd>
+        </dl>
+                <dl class="col-sm-12">
+                    <dt></dt>
+                    <dd>
+                        <button class="btn btn-success" type="submit">提交保存</button>
+                        <input type="button" value="返回" class="btn btn-default" onclick="goback()">
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<!-- Web Uploader -->
+<script type="text/javascript">
+    $(function () {
+        $(".hintIcon").mouseover(function () {
+            $(this).next(".hintTxt").fadeIn();
+        }).mouseout(function () {
+            $(this).next(".hintTxt").fadeOut();
+        });
+    });
+
+    function goback(){
+        window.location = "/${ad!}/userList${ext!}";
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

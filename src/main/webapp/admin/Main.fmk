@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>主面板 - 后台管理系统 - ${officialName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+    <link href="/admin/css/main.css" rel="stylesheet">
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight row">
+    <div class="col-sm-12 survey clearfix">
+        <div class="surveyCon">
+            <dl>
+                <dd class="personal_mess">
+                    <h2>
+                        <ul class="handle">
+                            <#if config.isActive>
+                            <li class="active" ><i class="fa fa-check-square-o"></i> 正常运行中</li>
+                            <#else>
+                            <li  ><i class="fa fa-check-square-o"></i> 系统已关闭</li>
+                        </#if>
+                        <li class="active" ><i class="fa fa-check-square-o"></i> 已开通支付</li>
+                        <li><i class=""></i></li>
+                        <li><i class=""></i><b> 上次登录：</b>${admin.lastLoginTime!"无"} <b> IP：</b>${admin.getLastLoginIpString()!"未知"} <b> 地点：</b>${admin.lastLoginArea!"未知"} </li>
+                        </ul>
+                    </h2>
+                    <div class="personal_des">
+                        <span>当前版本：<a href="#">V1.0.0</a></span>
+                        <span style="margin-left:15px">版本内容：<a href="#">连锁版</a></span>
+                        <span style="margin-left:15px">当前系统：${system!}</span>
+                        <span style="margin-left:15px">JDK：${jdk!}</span>
+                        <span style="margin-left:15px">Server：${tomcat!}</span>
+                        <span style="margin-left:15px">Db：${db!}</span>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <!--新增用户人数和总用户人数-->
+    <div class="col-sm-12 statistics">
+        <div class="col-sm-4 con con-left">
+            <h4>今日用户 / 用户总数</h4>
+            <p >${(userTodayTotal!(0))?string(',###')}人 / ${(userTotal!(0))?string(',###')}人 </p>
+        </div>
+        <div class="col-sm-4 con con-middle">
+            <h4>今日充值 / 充值总数</h4>
+            <p >${(rechargeTodayTotalReal!(0.00))?string(',##0.00')}元 / ${(rechargeTotalReal!(0.00))?string(',##0.00')}元</p>
+        </div>
+        <div class="col-sm-4 con con-right">
+            <h4>今日消费 / 消费总数</h4>
+            <p >${(consumeTodayTotal!(0.00))?string(',##0.00')}元 / ${(consumeTotal!(0.00))?string(',##0.00')}元</p>
+        </div>
+    </div>
+    <!--新增用户人数和总用户人数-->
+
+    <!--成绩分布图-->
+    <div class="col-sm-12 charts">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>充值分布图（两周对比）</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="echarts" id="echarts-order"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-12" style="text-align: center">温馨提示：本系统仅用于餐饮店交流使用，请勿用于非法用途，如有违规使用，请在24小时内自行删除！</div>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<!-- ECharts -->
+<script src="/admin/assets/js/plugins/echarts/echarts-all.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var scatterChart = echarts.init(document.getElementById("echarts-order"));
+        option = {
+            tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+                data:['上周','本周']
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : ['周一','周二','周三','周四','周五','周六','周日']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'上周',
+                    type:'line',
+                    stack: '总量',
+                    smooth:true,
+                    itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                    data:[<#list recharges1 as item>${item!},</#list>]
+    },
+        {
+            name:'本周',
+                type:'line',
+            stack: '总量',
+            smooth:true,
+            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+            data:[<#list recharges2 as item>${item!},</#list>]
+        }
+    ]
+    };
+        if (option && typeof option === "object") {
+            scatterChart.setOption(option, true);
+        }
+        $(window).resize(scatterChart.resize);
+    });
+</script>
+<!-- /JAVASCRIPTS -->
+

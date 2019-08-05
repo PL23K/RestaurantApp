@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>员工页面 -${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/main.css">
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+<#include "/view/common/Loading.fmk" />
+<@loading />
+
+<div class="wrapper">
+    <header>
+        <a href="/worker/profile${ext!}" class="logo">
+            <img class="avatar" src="<#if info.worker.avatar?length gt 0>${info.worker.avatar}<#else>/view/images/login_logo.png</#if>" alt="">
+        </a>
+        <span class="realname">
+            ${info.worker.realName!}
+        </span>
+        <a class="setting" id="qrScan" href="javascript:void(0);"><img src="/view/images/scan.png"/></a>
+        <div class="more-info">
+            <span class="been">${info.worker.sex?string("男","女")}员工</span>
+        </div>
+    </header>
+
+    <div class="mpart bg2">
+        <div class="vision">
+            <div class="s_mide layer" data-depth="0.35" >
+            </div>
+            <div class="s_botm layer" data-depth-x="0.1" data-depth-y=".08" >
+            </div>
+            <div class="s_botm layer" data-depth-x=".18" data-depth-y=".15" >
+            </div>
+        </div>
+    </div>
+
+    <h2 class="title1"><strong>总业绩</strong></h2>
+    <h2 class="title2" style="font-size: 1.6rem">${(info.worker.royaltyRate)?string(',##0.00')}</h2>
+    <h2 class="title3" style="font-size: 0.8rem">（今日：${(info.worker.royaltyRate)?string(',##0.00')}元  &nbsp;&nbsp;&nbsp;本月：${(info.worker.royaltyRate)?string(',##0.00')}元）</h2>
+
+    <h2 class="title1"><strong>我的二维码</strong></h2>
+    <div class="qrCode">
+        <div style="margin-bottom: 0.5rem">员工号：${info.worker.username!}</div>
+        <a href="javascript:void(0);">
+            <img src="/worker/qrCode${ext!}" />
+        </a>
+    </div>
+
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="/worker/searchUser${ext!}">
+            <div class="weui-cell__hd"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-businessman"></use></svg></div>
+            <div class="weui-cell__bd">
+                <p>查询用户</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="/worker/consumeList${ext!}">
+            <div class="weui-cell__hd"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-money_transfer"></use></svg></div>
+            <div class="weui-cell__bd">
+                <p>消费操作记录</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="/worker/rechargeList${ext!}">
+            <div class="weui-cell__hd"><img class="icon" src="/view/images/fasong-.png"/></div>
+            <div class="weui-cell__bd">
+                <p>充值操作记录</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+</div>
+<div class="footer" >
+    <div class="weui-footer">
+        <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+<script type="text/javascript" src="/view/assets/parallax.min.js"></script>
+<script type="text/javascript" src="/view/assets/iconfont/iconfont.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script type="text/javascript" src="/view/js/main.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var url="/getJssdkConfig${ext!}";
+        var data={
+            url:location.href
+        }
+        $.getJSON(url,data,function (res) {
+            //console.log(JSON.stringify(res));
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: res.data.appId, // 必填，公众号的唯一标识
+                timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+                nonceStr: res.data.noncestr, // 必填，生成签名的随机串
+                signature: res.data.signature,// 必填，签名
+                jsApiList: ["scanQRCode"] // 必填，需要使用的JS接口列表
+            });
+        });
+
+        $("#qrScan").bind("click",onQrScan);
+    });
+
+    function onQrScan() {
+        wx.scanQRCode({
+            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (res) {
+                if(typeof(res) == "object" && res.errMsg=="scanQRCode:ok"){
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                    var pos = result.lastIndexOf("User");
+                    var username = "";
+                    if(pos>0){
+                        username = result.substr(pos+4);
+                    }
+                    if(username != ""){
+                        window.location.href = "/worker/user${ext!}?username="+username;
+                    }
+                }else{
+                    alert("识别失败，请对焦");
+                }
+            }
+        });
+    }
+</script>
+</html>

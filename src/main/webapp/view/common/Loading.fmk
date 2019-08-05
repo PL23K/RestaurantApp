@@ -1,0 +1,8 @@
+<#macro loading>
+    <div class="loading_process">
+        <div class="loading-box"  >
+            <div class="loading-gif"></div>
+            加载中...
+        </div>
+    </div>
+</#macro>

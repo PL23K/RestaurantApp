@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>消费操作记录 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/profile.css">
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+<#include "/view/common/Loading.fmk" />
+<@loading />
+
+<div class="wrapper" style="margin-top: -50px;">
+    <!-- body 顶部加上如下代码 -->
+    <div class="weui-pull-to-refresh__layer">
+        <div class='weui-pull-to-refresh__arrow'></div>
+        <div class='weui-pull-to-refresh__preloader'></div>
+        <div class="down">下拉刷新</div>
+        <div class="up">释放刷新</div>
+        <div class="refresh">正在刷新</div>
+    </div>
+    <header class="hy-header">
+        <a href="/"> <h1 class="hy-title">消费操作记录</h1 > </a>
+    </header>
+    <div class="weui-navbar" style="position: inherit;">
+        <div class="weui-navbar__item">
+            今日消费：${info.todayConsume!(0)?string(",##0.00")}
+        </div>
+        <div class="weui-navbar__item">
+            总消费：${info.totalConsume!(0)?string(",##0.00")}
+        </div>
+    </div>
+    <#if (info.consumeList.getList()??) &&  (info.consumeList.getList().size() gt 0)>
+        <div class="weui-cells" id="list">
+        <#list info.consumeList.getList() as item>
+            <div class="weui-form-preview">
+                <div class="weui-form-preview__hd">
+                    <label class="weui-form-preview__label">消费金额</label>
+                    <em class="weui-form-preview__value">${item.totalMoney!(0)?string(",##0.00")}</em>
+                </div>
+                <div class="weui-form-preview__bd">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">详情</label>
+                        <span class="weui-form-preview__value">${item.remark!}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">扣款</label>
+                        <span class="weui-form-preview__value">充值余额：${item.money!(0)?string(",##0.00")} &nbsp;赠送余额：${item.coin!(0)?string(",##0.00")}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">消费时间</label>
+                        <span class="weui-form-preview__value">${item.addTime!}</span>
+                    </div>
+                </div>
+                <div class="weui-form-preview__ft" style="height: 8px;background-color: #fafafa;">
+                </div>
+            </div>
+        </#list>
+        </div>
+    <#else>
+        <div class="weui-loadmore weui-loadmore_line">
+            <span class="weui-loadmore__tips">暂无数据</span>
+        </div>
+    </#if>
+    <div class="weui-loadmore" id="load-more">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+<script type="text/javascript" src="/view/js/common.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $(".wrapper").pullToRefresh(function () {
+            $(location).attr('href', '/worker/consumeList${ext!}');
+        });
+        $("#load-more").hide();
+        var loading = false;  //状态标记
+        $(document.body).infinite().on("infinite", function() {
+            if(loading) return;
+            loading = true;
+            $("#load-more").show();
+            setTimeout(function() {
+                //$("#list").append("ddddddddd<br/>");
+                loading = false;
+                $("#load-more").hide();
+            }, 1000);   //模拟延迟
+        });
+    })
+
+</script>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>个人信息 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/profile.css">
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+<#include "/view/common/Loading.fmk" />
+<@loading />
+
+<div class="wrapper">
+    <header class="hy-header">
+        <a href="/worker${ext!}"> <h1 class="hy-title">个人信息</h1 > </a>
+    </header>
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:void(0);" id="modifyAvatar">
+            <div class="weui-cell__hd"><div class="avatar"><img src="<#if info.worker.avatar?length gt 0>${info.worker.avatar}<#else>/view/images/login_logo.png</#if>" alt=""></div></div>
+            <div class="weui-cell__bd">
+            </div>
+            <div class="weui-cell__ft">点击修改</div>
+        </a>
+        <form name="avatarForm" id="avatarForm" action="/worker/doModifyAvatar${ext}" enctype="multipart/form-data" method="post" style="display: none;">
+            <input type="file"  name="avatar" id="avatarInput" accept="image/gif,image/bmp,image/jpeg,image/jpg,image/png,image/svg">
+        </form>
+    </div>
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"></div>
+            <div class="weui-cell__bd">
+                <p>用户名</p>
+            </div>
+            <div class="weui-cell__ft">${info.worker.username!}</div>
+        </div>
+        <a class="weui-cell weui-cell_access" href="/worker/modifyRealName${ext!}">
+            <div class="weui-cell__hd"></div>
+            <div class="weui-cell__bd">
+                <p>姓名</p>
+            </div>
+            <div class="weui-cell__ft">${info.worker.realName!}</div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="/worker/modifyTel${ext!}">
+            <div class="weui-cell__hd"></div>
+            <div class="weui-cell__bd">
+                <p>手机号</p>
+            </div>
+            <div class="weui-cell__ft"><#if info.worker.phone?length lt 11><i class="weui-icon-warn"></i> 绑定<#else>${info.worker.phone}</#if></div>
+        </a>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"></div>
+            <div class="weui-cell__bd">
+                <p>性别</p>
+            </div>
+            <div class="weui-cell__ft"><input type="text" name="sex" value="${info.worker.getSexName()!}" id='sexPicker' data-url="/worker/doModifySex${ext}"/></div>
+        </div>
+    <a class="weui-cell weui-cell_access" href="/worker/modifyAddress${ext!}">
+        <div class="weui-cell__hd"></div>
+        <div class="weui-cell__bd">
+            <p>地址</p>
+        </div>
+        <div class="weui-cell__ft">${info.worker.address!}</div>
+    </a>
+    <div class="weui-cell mT1"></div>
+    <a class="weui-cell weui-cell_access" href="/doChangeToUser${ext!}">
+        <div class="weui-cell__hd"></div>
+        <div class="weui-cell__bd">
+            <p>切换身份</p>
+        </div>
+        <div class="weui-cell__ft">会员</div>
+    </a>
+    </div>
+</div>
+<div class="footer">
+    <div class="weui-footer">
+        <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+<script type="text/javascript" src="/view/assets/iconfont/iconfont.js"></script>
+<script type="text/javascript" src="/view/js/profile.js"></script>
+</html>

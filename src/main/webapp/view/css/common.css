@@ -1,0 +1,44 @@
+@charset "utf-8";
+
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,
+form,fieldset,legend,button,input,textarea,th,td,section,p,span,font,div{margin:0;padding:0;}
+
+a{
+    text-decoration: none;
+}
+
+.margin-1rem{
+    margin: 1rem;
+}
+
+.text-center{
+    text-align: center;
+}
+.padding-left-0{
+    padding-left: 0 !important;
+}
+.padding-right-0{
+    padding-right: 0 !important;
+}
+
+.fl{
+    float: left;
+}
+
+.fr{
+    float: right;
+}
+
+.wrapper{
+    max-width: 640px;
+    margin: 0 auto;
+    overflow: hidden;
+    position:relative;
+}
+
+.mT1{
+    margin-top: 1rem;
+}
+html,body{
+    background-color: #ffffff;
+}

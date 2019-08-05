@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>充值操作 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/profile.css">
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+
+<div class="wrapper">
+    <header class="hy-header">
+        <a href="/"> <h1 class="hy-title">充值操作</h1 > </a>
+    </header>
+    <form method="post" action="/worker/doRecharge${ext!}" name="modify" id="modify" enctype="multipart/form-data">
+        <div class="weui-cells__title">第一步：活动类型</div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <input  type="hidden" value="${info.user.username!}" name="targetUsername">
+                <select class="weui-select" name="promotionId">
+                    <#if info.promotionList?? && info.promotionList.size() gt 0>
+                    <#list info.promotionList as item>
+                    <option  value="${item.id}">${item.name} [${item.summary}]</option>
+                    </#list>
+                    <#else>
+                <option selected="selected" value="0">无</option>
+                </#if>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cells__title mT1">第二步：输入金额</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">金额</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" value="" name="money" placeholder="0.00">
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__tips" style="color: #ec4758">*活动一 需要真实收到现金</div>
+<div class="weui-cells__tips" style="color: #ec4758"> 充值档次<#list info.rechargeList as item> [${item.get("充值")}送${item.get("返现金额")}]</#list></div>
+        <div class="weui-cells__tips" style="color: #ec4758">*活动二 需要真实消费，消费多少填入多少，需要上传小票</div>
+        <div class="weui-cells__tips" style="color: #ec4758">*活动三 需要核对员工证，按等级发填入金额</div>
+        <div class="weui-cells__title mT1">第三步：拍照留证</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">拍照</label></div>
+                <div class="weui-cell__bd">
+                    <input type="file" name="upfile" accept="image/*"  capture />
+                </div>
+            </div>
+        </div>
+        <div class="button-box">
+            <button type="submit" class="weui-btn weui-btn_primary">提交</button>
+        </div>
+    </form>
+</div>
+<div class="footer" >
+    <div class="weui-footer">
+        <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+
+</script>
+</html>

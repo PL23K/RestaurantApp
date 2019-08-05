@@ -1,0 +1,11 @@
+<#macro assets>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link href="/admin/assets/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/admin/assets/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="/admin/assets/css/animate.css" rel="stylesheet">
+    <link href="/admin/assets/css/style.css" rel="stylesheet">
+</#macro>

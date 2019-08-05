@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>操作提示 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/jump.css">
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+
+<div class="wrapper">
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">${info.tip!}</h2>
+            <p class="weui-msg__desc">${info.content!}</p>
+        </div>
+        <div class="weui-msg__opr-area">
+            <p class="weui-btn-area">
+                <#if info.firstUrl?? ><a href="${info.firstUrl}" class="weui-btn weui-btn_primary">${info.firstTitle}</a></#if>
+                <#if info.secondUrl?? ><a href="${info.secondUrl}" class="weui-btn weui-btn_default">${info.firstTitle}</a></#if>
+            </p>
+        </div>
+        <div class="weui-msg__extra-area">
+            <div class="weui-footer">
+                <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+</html>

@@ -1,0 +1,19 @@
+<#macro js>
+    <!-- 全局js -->
+    <script src="/admin/assets/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/admin/assets/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/admin/assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/admin/assets/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/js/plugins/layer/layer.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="/admin/assets/js/hplus.js?v=4.1.0"></script>
+    <script type="text/javascript" src="/admin/assets/js/contabs.js"></script>
+
+    <!-- 第三方插件 -->
+    <script src="/admin/assets/js/plugins/pace/pace.min.js"></script>
+
+    <script src="/admin/assets/js/ToolTip.js"></script>
+
+    <script src="/admin/assets/js/plugins/layer/laydate/laydate.js"></script>
+</#macro>

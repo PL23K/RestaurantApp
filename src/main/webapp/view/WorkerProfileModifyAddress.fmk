@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>修改地址 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/profile.css">
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+<#include "/view/common/Loading.fmk" />
+<@loading />
+
+<div class="wrapper">
+    <header class="hy-header">
+        <a href="/"> <h1 class="hy-title">修改地址</h1 > </a>
+    </header>
+    <form method="post" action="/worker/doModifyAddress${ext!}" name="modifyTel" id="modifyTel">
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">地址</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" value="${info.address!}" name="address" id="address">
+                </div>
+            </div>
+        </div>
+        <div class="button-box">
+            <button type="submit" class="weui-btn weui-btn_primary">提交</button>
+        </div>
+    </form>
+    <div class="weui-msg__extra-area">
+        <div class="weui-footer">
+            <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+        </div>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+<script type="text/javascript" src="/view/js/profile.js"></script>
+</html>

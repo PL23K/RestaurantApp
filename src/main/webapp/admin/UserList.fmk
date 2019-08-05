@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>用户列表 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <#if !(info??)>
+        <div class="alert alert-danger alert-middle">
+            <span class="fa fa-warning"></span>
+            <strong>数据错误!</strong>&nbsp;&nbsp;请联系管理员或者重试 。
+        </div>
+</div>
+</body>
+</html>
+${info}
+</#if>
+    <div class="item categoryCon row">
+        <#if message??>
+            <div class="col-sm-12 m-b">
+                <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    ${message!}
+                </div>
+            </div>
+        </#if>
+        <div class="col-sm-12 m-b">
+            <div class="alert alert-dismissable alert-info ">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                <span class="ml-15"> 提示：本店会员全部都应该是微信加入的 </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 m-b">
+                <div class="col-sm-2">
+                    <button class="btn btn-primary addNew"  data-toggle="modal" data-target="#qrcodeModal">添加会员</button>
+                </div>
+                <div class="col-sm-4">
+                    <form action="/${ad!}/userList${ext!}" method="post" id="searchForm">
+                        <div class="input-group m-b">
+                            <div class="input-group-btn">
+                                <div class="btn-group">
+                                    <button id="searchSelect" data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false"><#if info.searchType?? && info.searchType=2>按昵称<#else>按用户名</#if> <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="searchSelectItem" href="javascript:void(0);" data-id="1" data-name="按用户名">按用户名</a></li>
+                                        <li><a class="searchSelectItem" href="javascript:void(0);" data-id="2" data-name="按昵称">按昵称</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <input id="searchType" name="searchType" value="${info.searchType!"1"}" type="hidden">
+                            <input class="form-control" name="searchKey" placeholder=" " <#if info.searchKey?? > value="${info.searchKey!}"</#if>>
+                        <a class="input-group-addon btn btn-primary" href="javascript:void(0);" onclick="$('#searchForm').submit();">搜索</a>
+                </div>
+                </form>
+            </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                            <table class="table table-striped table-hover centerTableStyle">
+                                <thead>
+                                <tr>
+                                    <th>用户编号</th>
+                                    <th>用户名</th>
+                                    <th>昵称</th>
+                                    <th>性别</th>
+                                    <th>余额</th>
+                                    <th>等级</th>
+                                    <th>冻结</th>
+                                    <th>生日</th>
+                                    <th>电话</th>
+                                    <th>邮箱</th>
+                                    <th>地址</th>
+                                    <th>注册时间</th>
+                                    <th >操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <#if (info.page.getList())?? && info.page.getList().size() gt 0>
+                                    <#list info.page.getList() as item>
+                                        <tr>
+                                            <td >
+                                                <#if (item.isNew())><code>新</code></#if> ${item.memberId!}
+                                            </td>
+                                            <td >
+                                                <img src="${item.avatar!}" style="max-width: 40px;height: 40px"> ${item.username!}
+                                            </td>
+                                            <td>${item.realName!}</td>
+                                            <td>
+                                                ${item.sex?string("男","女")}
+                                            </td>
+                                            <td>
+                                                <code>${((item.money+item.coin)!(0.00))?string(',##0.00')}</code> [现金<code>${((item.money)!(0.00))?string(',##0.00')}</code>抵券<code>${((item.coin)!(0.00))?string(',##0.00')}</code>]
+                                            </td>
+                                            <td>
+                                                <#if item.level = 1>
+                                                <span class="label">${item.getLevelName()}</span>
+                                                <#elseif item.level = 2>
+                                                <span class="label label-success">${item.getLevelName()}</span>
+                                                <#elseif item.level = 3>
+                                                <span class="label label-primary">${item.getLevelName()}</span>
+                                                <#elseif item.level = 4>
+                                                <span class="label label-danger">${item.getLevelName()}</span>
+                                                <#else>
+                                                未知
+                                                </#if>
+                                            </td>
+                                            <td>
+                                                <#if item.isActive>
+                                                <span class="badge badge-primary">正常</span>
+                                                <#else>
+                                                <span class="badge badge-danger">冻结</span>
+                                                </#if>
+                                            </td>
+                                            <td>
+                                                ${item.birthday?date}
+                                            </td>
+                                            <td>
+                                                ${item.phone!}
+                                            </td>
+                                            <td>
+                                                ${item.email!}
+                                            </td>
+                                            <td>
+                                                ${Utils.Short(item.address,8,"...")}
+                                            </td>
+                                            <td>
+                                                ${item.addTime?datetime}
+                                            </td>
+                                            <td>
+                                                <a href="/${ad!}/addUser/${item.id!}${ext!}" >修改</a>&nbsp;&nbsp;
+                                                <#if !(item.isWorker()) ><a href="/${ad!}/changeWorker/${item.id!}${ext!}" >转为员工</a></#if>
+                                                <a href="javascript:void(0);" data-url="/${ad!}/doDeleteUser/${item.id!}${ext!}" onclick="deleteItem(this)">删除</a>&nbsp;&nbsp;
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                    <#else>
+                                        <tr><td colspan="14" >暂无记录</td></tr>
+                                </#if>
+                                </tbody>
+                            </table>
+                            <div class="separator"></div>
+                            <div class="row">
+                                <div class="col-sm-12 text-right">
+                                    <#include "/admin/common/Paginate.fmk" />
+                                    <@paginate currentPage=info.page.getPageNumber()
+                                    totalPage=info.page.getTotalPage() sizePage=info.page.getPageSize()
+                                    totalRow=info.page.getTotalRow() actionUrl="/${ad!}/userList"
+                                    ext = ext
+                                    urlParas="-${info.searchType!'n1'}-${info.searchKey!''}-${info.startTime!''}-${info.endTime!''}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="qrcodeModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated flipInY">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <small class="font-bold" id="title"></small>
+            </div>
+            <div class="modal-body" id="body" style="text-align: center;">
+                <span>请让用户扫描公众号二维码进行注册</span><br/>
+                <img src="/admin/images/qrcode_gh_f0ad92c89598_1.jpg" style="width: 200px;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    $(function () {
+
+    });
+
+    function showMsg(msg){
+        parent.layer.msg(msg);
+    }
+
+    function deleteItem(obj){
+        //询问框
+        var deleteEle = $(obj);
+        parent.layer.confirm('确定要删除该用户吗？', {
+            btn: ['确定','取消'], //按钮
+            shade: [0.2,'#000']
+        }, function(){
+            parent.layer.close(parent.layer.index);
+            //删除
+            window.location = deleteEle.attr("data-url");
+        }, function(){
+        });
+        return false;
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

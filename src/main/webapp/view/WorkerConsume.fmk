@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>消费操作 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/profile.css">
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+
+<div class="wrapper">
+    <header class="hy-header">
+        <a href="/"> <h1 class="hy-title">消费操作</h1 > </a>
+    </header>
+    <div style="color: #999;line-height: 1.6rem;margin: 0.5rem 0 1.4rem 0; text-align: center;font-size: 0.7rem">
+        ${info.user.realName} &nbsp;充值余额[<span style="color:#fe5454;">${(info.user.money)?string(',##0.00')}</span>] &nbsp; 赠送余额[<span style="color:#fe5454;">${(info.user.coin)?string(',##0.00')}</span>]
+    </div>
+    <form method="post" action="/worker/doConsume${ext!}" name="modify" id="modify" enctype="multipart/form-data">
+        <div class="weui-cells__title">第一步：输入总金额</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">订单金额</label></div>
+                <div class="weui-cell__bd">
+                    <input  type="hidden" value="${info.user.username!}" name="targetUsername">
+                    <input class="weui-input" id="totalMoney" type="number" value="" name="totalMoney" placeholder="0.00">
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title mT1">第二步：输入要扣除的充值余额[要扣多少填多少]</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">充值余额</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="money" type="number" value="" name="money" placeholder="0.00">
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title mT1">第三步：输入要扣除的赠送余额[总金额的${info.rate}%]</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">赠送余额</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input"  id="coin" type="number" value="" name="coin" placeholder="0.00">
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title mT1">第四步：拍照留证</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">小票</label></div>
+                <div class="weui-cell__bd">
+                    <input type="file" name="upfile" accept="image/*"  capture />
+                </div>
+            </div>
+        </div>
+        <div class="button-box">
+            <button type="submit" class="weui-btn weui-btn_primary">提交</button>
+        </div>
+    </form>
+</div>
+<div class="footer" >
+    <div class="weui-footer">
+        <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    $(function() {
+        //初始化
+        var rate = ${info.rate};
+        $("#totalMoney").change(function(){
+            var totalMoney = $("#totalMoney").val();
+            var coin = (totalMoney*rate/100.00).toFixed(2);
+            $("#coin").val(coin);
+            $("#money").val((totalMoney-coin).toFixed(2));
+        });
+    })
+</script>
+</html>

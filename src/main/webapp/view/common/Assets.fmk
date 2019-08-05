@@ -1,0 +1,21 @@
+<#macro assets>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="applicable-device" content="mobile">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <meta http-equiv="cache-control" content="no-cache">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="${config.siteName!}">
+    <link rel="apple-touch-icon" href="/view/images/icon/logo.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/view/images/icon/logo.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/view/images/icon/logo.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/view/images/icon/logo.png">
+
+    <link rel="stylesheet" href="/view/assets/weui/weui.min.css">
+    <link rel="stylesheet" href="/view/assets/weui/jquery-weui.min.css">
+
+</#macro>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>后台管理系统 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+    <link href="/admin/css/index.css" rel="stylesheet">
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+<div id="wrapper" >
+    <!--左侧导航开始-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="nav-close"><i class="fa fa-times-circle"></i>
+        </div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div class="profile-element">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <div class="back-img">
+                                <img src="/admin/images/default_avatar.png"/>
+                            </div>
+                            <span class="clear">
+                               <span class="block m-t-xs"><strong class="font-bold">${admin.username!}</strong></span>
+                                <span class="text-muted text-xs block">欢迎您，${admin.realName!} <b class="caret"></b></span>
+                                </span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a class="J_menuItem" href="/${ad!}/addAdmin/${admin.id!}-self${ext!}">修改资料</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="/${ad!}/doLogout${ext!}">安全退出</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="logo-element">${admin.getFirstName()!"店"}
+                    </div>
+                </li>
+                <li>
+                    <a class="J_menuItem" href="/${ad!}/main${ext!}" data-index="0">
+                        <i class="fa fa-home"></i>
+                        <span class="nav-label">概况</span></a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-wrench"></i>
+                        <span class="nav-label">系统管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/baseInfo${ext!}" data-index="1">基本信息</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/promotionList${ext!}" data-index="2">活动管理</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/userLevelList${ext!}" data-index="3">等级管理</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/userList${ext!}" data-index="4">用户管理</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/adminList${ext!}" data-index="5">管理员管理</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-cutlery"></i>
+                        <span class="nav-label">店铺管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/shopList${ext!}" data-index="6">店铺列表</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/workerList${ext!}" data-index="7">员工列表</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-bar-chart"></i>
+                        <span class="nav-label">销售业绩</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/rechargeOrderList${ext!}" data-index="8">充值记录</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="/${ad!}/consumeList${ext!}" data-index="9">消费记录</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!--左侧导航结束-->
+    <!--右侧部分开始-->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                    <a href="javascript:void(0);">
+                        <div class="show_qrcode">
+                            <i class="fa fa-desktop"></i>
+                            <span>总管理后台</span>
+                        </div>
+                    </a>
+                    <a href="javascript:void(0);" data-toggle="modal" data-target="#qrcodeModal">
+                        <div class="show_qrcode">
+                            <i class="fa fa-qrcode"></i>
+                            <span>充值二维码</span>
+                        </div>
+                    </a>
+                </div>
+            </nav>
+        </div>
+        <div class="row content-tabs">
+            <button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i>
+            </button>
+            <nav class="page-tabs J_menuTabs">
+                <div class="page-tabs-content">
+                    <a href="javascript:;" class="active J_menuTab" data-id="/${ad!}/main${ext!}">概况<i class="fa fa-times-circle"></i></a>
+                </div>
+            </nav>
+            <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
+            </button>
+            <div class="btn-group roll-nav roll-right">
+                <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
+
+                </button>
+                <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                    <li class="J_tabShowActive"><a>定位当前选项卡</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="J_tabCloseAll"><a>关闭全部选项卡</a>
+                    </li>
+                    <li class="J_tabCloseOther"><a>关闭其他选项卡</a>
+                    </li>
+                </ul>
+            </div>
+            <a href="/${ad!}/doLogout${ext!}" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+        </div>
+        <div class="row J_mainContent" id="content-main">
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="/${ad!}/main${ext}" frameborder="0" data-id="/${ad!}/main${ext!}" seamless></iframe>
+        </div>
+        <div class="footer">
+            <div class="pull-right">&copy; 2019 <a href="${config.siteUrl!}" target="_blank">${config.company!}</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="qrcodeModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated flipInY">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <small class="font-bold" id="title"></small>
+            </div>
+            <div class="modal-body" id="body" style="text-align: center;">
+                <span>扫描二维码进入公众号</span><br/>
+                <img src="/admin/images/qrcode_gh_f0ad92c89598_1.jpg" style="width: 200px;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+
+</script>
+<!-- /JAVASCRIPTS -->
+

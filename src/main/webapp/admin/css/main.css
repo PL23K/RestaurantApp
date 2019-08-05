@@ -1,0 +1,98 @@
+body{
+    background: #f2f2f2;
+    padding:0 0 0 10px;
+}
+
+.survey {
+    background: #fff;
+    min-height: 116px;
+    padding-top: 5px;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,.2);
+}
+
+.surveyCon {
+    padding: 20px 20px 6px 20px;
+}
+.personal_mess {
+    float: left;
+    margin-left: 20px;
+}
+.personal_mess h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 45px;
+}
+
+.handle {
+    float: left;
+    padding-left: 0px;
+}
+ul li {
+    list-style: none;
+}
+ul.handle li {
+    font-size: 12px;
+    position: relative;
+    margin-right: 20px;
+    display: inline-block;
+    float: left;
+}
+ul.handle li.active {
+    color: #000;
+    font-weight: 600;
+}
+ul.handle li i {
+    font-size: 16px;
+}
+ul.handle li.active i {
+    color: #00a400;
+}
+
+.statistics {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 20px;
+}
+
+.con{
+    -webkit-box-flex: 1;
+    flex: 1 1 25%;
+    background: #f8f8f8;
+    font-size: 20px;
+    color: #fff;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 2px;
+    padding: 35px 0 30px 0;
+}
+
+.con-left{
+    background: #84BDD0;
+}
+.con-right{
+    background: #84BDD0;
+}
+.con-middle{
+    background: #849BD0;
+}
+
+.statistics .con h4 {
+    padding: 0 10px;
+    font-size: 20px;
+    line-height: 1em;
+    height: 1em;
+    margin-bottom: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.charts{
+    padding-left: 0;
+    padding-right: 0;
+}
+.st-value{
+    color: #000000;
+}

@@ -1,0 +1,8 @@
+<#macro innerError>
+    <#if (!(info??))>
+        <div class="weui-loadmore weui-loadmore_line">
+            <span class="weui-loadmore__tips">加载错误</span>
+        </div>
+        ${info}
+    </#if>
+</#macro>

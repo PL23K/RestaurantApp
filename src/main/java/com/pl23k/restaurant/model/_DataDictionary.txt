@@ -1,0 +1,194 @@
+Table: tb_admin
+---------------+--------------+------+-----+---------------------+---------
+ Field         | Type         | Null | Key | Default             | Remarks 
+---------------+--------------+------+-----+---------------------+---------
+ id            | INT(10)      | NO   | PRI |                     |         
+ username      | VARCHAR(20)  | NO   |     |                     | 管理员用户名  
+ password      | VARCHAR(50)  | NO   |     |                     | 管理员密码   
+ realName      | VARCHAR(20)  | NO   |     |                     | 管理员姓名   
+ role          | INT(10)      | NO   |     | 0                   | 0管理员 1分店店长 2店员
+ phone         | VARCHAR(20)  | YES  |     |                     | 电话号码    
+ email         | VARCHAR(50)  | NO   |     |                     | 邮箱      
+ lastLoginTime | DATETIME(19) | NO   |     | 0000-00-00 00:00:00 | 上次登录时间  
+ lastLoginIp   | INT(10)      | NO   |     | 0                   | 上次登录IP  
+ curLoginTime  | DATETIME(19) | NO   |     | 0000-00-00 00:00:00 | 当前登录时间  
+ curLoginIp    | INT(10)      | NO   |     | 0                   | 当前登录IP  
+ addTime       | DATETIME(19) | NO   |     | 0000-00-00 00:00:00 | 添加时间    
+ shopId        | INT(10)      | NO   |     | 0                   | 所属的店铺ID 
+ royalty       | INT(10)      | NO   |     | 0                   | 提成 %比   
+---------------+--------------+------+-----+---------------------+---------
+
+Table: tb_config
+----------+--------------+------+-----+---------+---------
+ Field    | Type         | Null | Key | Default | Remarks 
+----------+--------------+------+-----+---------+---------
+ id       | INT(10)      | NO   | PRI |         |         
+ siteName | VARCHAR(255) | NO   |     |         | 网站名称    
+ siteUrl  | VARCHAR(255) | NO   |     |         | 网站地址    
+ record   | VARCHAR(255) | NO   |     |         | 备案      
+ phone    | VARCHAR(20)  | NO   |     |         | 客服电话    
+ email    | VARCHAR(255) | NO   |     |         | 官方邮箱    
+ company  | VARCHAR(50)  | NO   |     |         | 公司名称    
+ address  | VARCHAR(255) | NO   |     |         | 公司地址    
+----------+--------------+------+-----+---------+---------
+
+Table: tb_consume
+-------------+---------------+------+-----+---------------------+---------
+ Field       | Type          | Null | Key | Default             | Remarks 
+-------------+---------------+------+-----+---------------------+---------
+ id          | INT(10)       | NO   | PRI |                     |         
+ memberId    | VARCHAR(20)   | NO   |     |                     | 会员ID    
+ adminId     | INT(10)       | NO   |     | 0                   | 操作人员ID  
+ totalMoney  | DECIMAL(12,2) | NO   |     | 0.00                | 消费总金额   
+ money       | DECIMAL(12,2) | NO   |     | 0.00                | 扣除现金    
+ coin        | DECIMAL(12,2) | NO   |     | 0.00                | 扣除金币    
+ evidence    | VARCHAR(255)  | NO   |     |                     | 小票拍照    
+ addTime     | DATETIME(19)  | NO   |     | 0000-00-00 00:00:00 | 扣除时间    
+ beforeMoney | DECIMAL(12,2) | NO   |     | 0.00                | 扣除前现金   
+ beforeCoin  | DECIMAL(12,2) | NO   |     | 0.00                | 扣除后金币   
+ afterMoney  | DECIMAL(12,2) | NO   |     | 0.00                | 扣除后金币   
+ afterCoin   | DECIMAL(12,2) | NO   |     | 0.00                | 扣除后金币   
+ status      | TINYINT(3)    | NO   |     | 0                   | 0 完成   1已退回
+ rejectAdmin | INT(10)       | NO   |     | 0                   | 退回管理员ID 
+-------------+---------------+------+-----+---------------------+---------
+
+Table: tb_promotion
+---------+--------------+------+-----+---------------------+---------
+ Field   | Type         | Null | Key | Default             | Remarks 
+---------+--------------+------+-----+---------------------+---------
+ id      | INT(10)      | NO   | PRI |                     |         
+ name    | VARCHAR(255) | NO   |     |                     | 促销名称    
+ summay  | VARCHAR(500) | NO   |     |                     | 促销介绍    
+ sort    | INT(10)      | NO   |     | 0                   | 排序  越小越靠前
+ active  | BIT          | NO   |     | 0                   | 是否启动    
+ addTime | DATETIME(19) | NO   |     | 0000-00-00 00:00:00 | 添加时间    
+---------+--------------+------+-----+---------------------+---------
+
+Table: tb_recharge
+-----------+---------------+------+-----+---------------------+---------
+ Field     | Type          | Null | Key | Default             | Remarks 
+-----------+---------------+------+-----+---------------------+---------
+ id        | INT(10)       | NO   | PRI |                     |         
+ memberId  | VARCHAR(20)   | NO   |     |                     | 会员ID    
+ money     | DECIMAL(12,2) | NO   |     | 0.00                | 充值金额    
+ promotion | INT(10)       | NO   |     | 0                   | 活动类别    
+ source    | TINYINT(3)    | NO   |     | 0                   | 充值来源 0管理员 1代理 2支付宝 3微信 4网银 5其他
+ orderId   | VARCHAR(35)   | NO   |     |                     | 订单编号    
+ payId     | VARCHAR(35)   | NO   |     |                     | 支付编号    
+ addTime   | DATETIME(19)  | NO   |     | 0000-00-00 00:00:00 | 完成时间    
+-----------+---------------+------+-----+---------------------+---------
+
+Table: tb_recharge_order
+---------------+---------------+------+-----+---------------------+---------
+ Field         | Type          | Null | Key | Default             | Remarks 
+---------------+---------------+------+-----+---------------------+---------
+ id            | INT(10)       | NO   | PRI |                     |         
+ memberId      | VARCHAR(20)   | NO   |     |                     | 会员标识    
+ payType       | TINYINT(3)    | NO   |     | 0                   | 支付方式 0现金 1微信 2支付宝 3网银  4其他
+ payId         | VARCHAR(35)   | NO   |     |                     | 支付流水号（支付前是预付号，支付后是支付号）
+ orderId       | VARCHAR(35)   | NO   |     |                     | 订单编号    
+ status        | TINYINT(3)    | NO   |     | 0                   | 订单状态 0未付款 1付款中 2已付款 3已完成
+ addTime       | DATETIME(19)  | NO   |     | 0000-00-00 00:00:00 | 创建时间    
+ remark        | VARCHAR(255)  | NO   |     |                     | 订单备注    
+ money         | DECIMAL(12,2) | NO   |     | 0.00                | 应付金额    
+ payMoney      | DECIMAL(12,2) | NO   |     | 0.00                | 本次支付的金额 
+ discountMoney | DECIMAL(12,2) | NO   |     | 0.00                | 本次优惠金额  
+ discount      | INT(10)       | NO   |     | 0                   | 折扣 %比   
+ promotion     | INT(10)       | NO   |     | 0                   | 卡片类型（快照）
+---------------+---------------+------+-----+---------------------+---------
+
+Table: tb_recharge_pay_order_wechat
+-------------+--------------+------+-----+---------------------+---------
+ Field       | Type         | Null | Key | Default             | Remarks 
+-------------+--------------+------+-----+---------------------+---------
+ payId       | VARCHAR(32)  | NO   | PRI |                     |         
+ appId       | VARCHAR(32)  | NO   |     |                     | 微信开放平台审核通过的应用APPID
+ mchId       | VARCHAR(32)  | NO   |     |                     | 微信支付分配的商户号
+ seqNo       | VARCHAR(32)  | NO   |     |                     | 设备号     
+ nonceStr    | VARCHAR(32)  | NO   |     |                     | 随机字符串   
+ sign        | VARCHAR(32)  | NO   |     |                     | 签名      
+ openId      | VARCHAR(128) | NO   |     |                     | 用户在商户appid下的唯一标识
+ isSubscribe | BIT          | NO   |     | 0                   | 用户是否关注公众账号，1-关注，0-未关注
+ tradeType   | VARCHAR(16)  | NO   |     |                     | 交易类型，默认APP
+ bankType    | VARCHAR(16)  | NO   |     |                     | 银行类型，采用字符串类型的银行标识
+ totalFee    | INT(10)      | NO   |     | 0                   | 交易金额，单位为分
+ feeType     | VARCHAR(8)   | NO   |     |                     | 货币类型，符合ISO4217标准的三位字母代码，默认人民币：CNY
+ cashFee     | INT(10)      | NO   |     | 0                   | 现金支付金额订单现金支付金额，单位分
+ cashFeeType | VARCHAR(16)  | NO   |     |                     | 货币类型，符合ISO4217标准的三位字母代码，默认人民币：CNY
+ couponFee   | INT(10)      | NO   |     | 0                   | 代金券或立减优惠金额<=订单总金额，订单总金额-代金券或立减优惠金额=现金支付金额，单位分
+ couponCount | INT(10)      | NO   |     | 0                   | 代金券或立减优惠使用数量
+ couponIds   | VARCHAR(255) | NO   |     |                     | 代金券或立减优惠ID集，最多20个 例：[22,333,444,555]
+ couponFees  | VARCHAR(255) | NO   |     |                     | 单个代金券或立减优惠支付金额，最多20个 例：[22,333,444,555]
+ outTradeNo  | VARCHAR(32)  | NO   |     |                     | 本台内订单号  
+ attach      | VARCHAR(128) | NO   |     |                     | 商家数据包，原样返回
+ timeEnd     | DATETIME(19) | NO   |     | 1970-01-01 00:00:00 | 完成时间    
+-------------+--------------+------+-----+---------------------+---------
+
+Table: tb_shop
+---------+--------------+------+-----+---------------------+---------
+ Field   | Type         | Null | Key | Default             | Remarks 
+---------+--------------+------+-----+---------------------+---------
+ id      | INT(10)      | NO   | PRI |                     |         
+ name    | VARCHAR(255) | NO   |     |                     | 店铺名称    
+ summary | VARCHAR(500) | NO   |     |                     | 介绍      
+ address | VARCHAR(255) | NO   |     |                     | 店铺地址    
+ picture | VARCHAR(255) | NO   |     |                     | 店铺封面    
+ notice  | VARCHAR(500) | NO   |     |                     | 店铺公告    
+ phone   | VARCHAR(20)  | NO   |     |                     | 联系电话    
+ addTime | DATETIME(19) | NO   |     | 0000-00-00 00:00:00 | 添加时间    
+ config  | TEXT(65535)  | NO   |     |                     | json配置项 
+---------+--------------+------+-----+---------------------+---------
+
+Table: tb_user
+----------+---------------+------+-----+---------------------+---------
+ Field    | Type          | Null | Key | Default             | Remarks 
+----------+---------------+------+-----+---------------------+---------
+ id       | INT(10)       | NO   | PRI |                     |         
+ memberId | VARCHAR(20)   | NO   |     |                     | 用户ID    
+ username | VARCHAR(20)   | NO   |     |                     | 用户名     
+ password | VARCHAR(50)   | NO   |     |                     | 用户名     
+ realName | VARCHAR(20)   | NO   |     |                     | 姓名/昵称   
+ sex      | BIT           | NO   |     | 0                   | 性别 0女 1男
+ birthday | DATE(10)      | NO   |     | 0000-00-00          | 生日      
+ address  | VARCHAR(255)  | NO   |     |                     | 地址      
+ phone    | VARCHAR(20)   | NO   |     |                     | 电话      
+ email    | VARCHAR(50)   | NO   |     |                     | 邮箱      
+ avator   | VARCHAR(255)  | NO   |     |                     | 头像地址    
+ isActive | BIT           | NO   |     | 0                   | 是否激活（冻结）
+ coin     | DECIMAL(12,2) | NO   |     | 0.00                | 金币（平台金币）
+ money    | DECIMAL(12,2) | NO   |     | 0.00                | 充值余额    
+ level    | INT(10)       | NO   |     | 0                   | 等级      
+ wechatId | INT(10)       | NO   |     | 0                   | 绑定的微信ID 
+ addTime  | DATETIME(19)  | NO   |     | 0000-00-00 00:00:00 | 注册时间    
+----------+---------------+------+-----+---------------------+---------
+
+Table: tb_user_level
+-----------+-------------+------+-----+---------+---------
+ Field     | Type        | Null | Key | Default | Remarks 
+-----------+-------------+------+-----+---------+---------
+ id        | INT(10)     | NO   | PRI |         |         
+ name      | VARCHAR(20) | NO   |     |         | 键       
+ discount  | INT(10)     | NO   |     | 0       | 折扣 %比   
+ condition | INT(10)     | NO   |     | 0       | 成为条件，消费满N 可自动升级为此等级
+ sort      | INT(10)     | NO   |     | 0       | 排序  越小越靠前
+-----------+-------------+------+-----+---------+---------
+
+Table: tb_wechat_user
+-----------------+--------------+------+-----+---------------------+---------
+ Field           | Type         | Null | Key | Default             | Remarks 
+-----------------+--------------+------+-----+---------------------+---------
+ id              | INT(10)      | NO   | PRI |                     |         
+ memberId        | VARCHAR(20)  | NO   |     |                     | 绑定的用户   
+ openId          | VARCHAR(50)  | NO   |     |                     | 微信公众号ID 
+ wechatId        | VARCHAR(50)  | NO   |     |                     | 微信号     
+ nickName        | VARCHAR(50)  | NO   |     |                     | 微信昵称    
+ sex             | BIT          | NO   |     | 0                   | 性别      
+ avatarUrl       | VARCHAR(255) | NO   |     |                     | 头像地址    
+ accessToken     | VARCHAR(255) | NO   |     |                     | 授权码     
+ addTime         | DATETIME(19) | NO   |     | 0000-00-00 00:00:00 | 创建时间    
+ accessTokenTime | DATETIME(19) | NO   |     | 0000-00-00 00:00:00 | 授权码时间   
+ unionId         | VARCHAR(50)  | NO   |     |                     | 联合ID    
+ address         | VARCHAR(255) | NO   |     |                     | 地址      
+ privilege       | VARCHAR(500) | NO   |     |                     | 特权json  
+-----------------+--------------+------+-----+---------------------+---------
+

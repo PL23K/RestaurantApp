@@ -1,0 +1,131 @@
+/*垂直居中*/
+.verticalAlign {
+    vertical-align: middle;
+    display: inline-block;
+    height: 100%;
+    margin-left: -1px;
+}
+
+.xcConfirm .xc_layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #666666;
+    opacity: 0.5;
+    z-index: 2147000000;
+}
+
+.xcConfirm .popBox {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    background-color: #ffffff;
+    z-index: 2147000001;
+    width: 500px;
+    height: 270px;
+    margin-left: -285px;
+    margin-top: -175px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #535e66;
+    padding:10px 20px;
+}
+
+.xcConfirm .popBox .ttBox {
+    height: 50px;
+    line-height: 50px;
+    padding: 0 20px;
+    border-bottom: solid 1px #eef0f1;
+}
+
+.xcConfirm .popBox .ttBox .tt {
+    font-size: 18px;
+    display: block;
+    float: left;
+    height: 50px;
+    position: relative;
+}
+
+.xcConfirm .popBox .ttBox .clsBtn {
+    display: block;
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: url(./img/iconsf.png) -48px -96px no-repeat;
+    transform: scale(1.2);
+}
+
+.xcConfirm .popBox .txtBox {
+    padding:10px 20px 0;
+    font-size:16px;
+    height: 157px;
+    overflow: hidden;
+    color: #3e3e3e;
+    font-weight: normal;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.xcConfirm .popBox .txtBox .bigIcon {
+    float: left;
+    margin-right: 20px;
+    width: 48px;
+    height: 48px;
+    background-image: url(./img/iconsf.png);
+    background-repeat: no-repeat;
+    background-position: 48px 0;
+}
+
+.xcConfirm .popBox .txtBox p {
+    line-height:24px;
+}
+
+.xcConfirm .popBox .txtBox p input {
+    width: 364px;
+    height: 30px;
+    border: solid 1px #eef0f1;
+    font-size: 18px;
+    margin-top: 6px;
+}
+
+.xcConfirm .popBox .btnArea {
+    border-top: solid 1px #eef0f1;
+}
+
+.xcConfirm .popBox .btnGroup {
+    float: right;
+}
+
+.xcConfirm .popBox .btnGroup .sgBtn {
+    margin-top: 9px;
+    float:right;
+}
+
+.xcConfirm .popBox .sgBtn {
+    display: block;
+    cursor: pointer;
+    float: left;
+    width: 95px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    color: #FFFFFF;
+    border-radius: 5px;
+}
+
+.xcConfirm .popBox .sgBtn.ok {
+    background-color: #0095d9;
+    color: #FFFFFF;
+    margin-left:10px;
+}
+
+.xcConfirm .popBox .sgBtn.cancel {
+    background-color: #7296a5;
+    color: #FFFFFF;
+}

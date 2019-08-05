@@ -1,0 +1,26 @@
+#------------ System ------------
+devMode = true
+adminPath = data
+ext=none
+ipData = ipData.dat
+apiHost= 127.0.0.1
+apiPort= 84
+
+#------------ MySQL ------------
+jdbcUrl = jdbc:mysql://127.0.0.1:3306/db_pl_restaurant?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+mysqlPath = C:\\Program+Files\\MySQL\\MySQL+Server+5.7\\bin
+mysqlIp = 127.0.0.1
+mysqlPort = 3306
+database = db_heyday_international_system
+dbBackPath = d:\\heydayMember
+user = root
+password = 123456
+
+#------------ ConnectionPools ------------
+db.default.poolInitialSize=50
+db.default.poolMaxSize=100
+db.default.connectionTimeoutMillis=1000
+db.default.valid.clean=true
+db.default.migration.auto=true
+db.default.migration.initOnMigrate=true
+

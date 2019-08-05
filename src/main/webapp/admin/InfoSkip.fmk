@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<title>操作提示- 后台管理系统 - ${config.siteName!}</title>
+	<#if delay gt 0>
+		<meta http-equiv="refresh" content='${delay!};url=${pageLink!}'>
+	</#if>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<#include "/admin/common/Assets.fmk" />
+	<@assets />
+</head>
+<body>
+<div class="container" style="margin-top: 200px;">
+	<div class="alert <#if type==1>alert-success<#else>alert-danger</#if> alert-middle alert-dismissible fade in out"
+		 role="alert">
+		<i class="icon-remove close" data-dismiss="alert"></i>
+		<span class="bold">${message!}</span> &nbsp;<#if delay gt 0>系统将在 <span class="tip_wait_time" id="info_delay">${delay!}</span> 秒后跳转至 <a
+			href="${pageLink!}">${pageName!}</a></#if>
+	</div>
+</div>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        setInterval(function(){
+            var delay = $("#info_delay").html();
+            if(delay > 0){
+                delay--;
+            }
+
+            $("#info_delay").html(delay);
+        },1000);
+    });
+</script>
+<!-- /JAVASCRIPTS -->

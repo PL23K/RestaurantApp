@@ -1,0 +1,41 @@
+@charset "utf-8";
+@import url("module.css");
+
+.avatar{
+    width: 3rem;
+    height: 3rem;
+    margin-right: 5px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.avatar>img{
+    width: 3rem;
+    height:3rem;
+    margin-right: 0;!important;
+}
+.button-box{
+    padding: 2rem 1rem;
+}
+
+#sexPicker{
+    display: inline-block;
+    border:none;
+    color: #999;
+    line-height: 1.47058824;
+    font-size: 17px;
+    text-align: right;
+}
+#address-picker{
+    display: inline-block;
+    border: none;
+    color: #999;
+    line-height: 1.47058824;
+    font-size: 17px;
+    text-align: right;
+}
+
+.weui-cell__bd .tip{
+    color: #fa9797;
+    margin-left: 1rem;
+    font-size: 0.8rem;
+}

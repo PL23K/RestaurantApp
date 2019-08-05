@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Mobile specific metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <!-- Force IE9 to render in normal mode -->
+    <!--[if IE]>
+    <!--<meta http-equiv="x-ua-compatible" content="IE=9"/>--><![endif]-->
+    <title>后台登录 - ${config.siteName!}</title>
+    <!-- Bootstrap stylesheets -->
+    <link rel="stylesheet" href="/admin/assets/css/bootstrap.min.css?v=3.3.6">
+    <link rel="stylesheet" href="/admin/assets/css/font-awesome.min.css?v=4.4.0">
+    <link rel="stylesheet" href="/admin/assets/xcConfirm/xcConfirm.css" >
+    <link rel="stylesheet" href="/admin/css/login.css">
+</head>
+
+<body class="sign-in" onkeydown="keyLogin()">
+<div class="sign-in-panel">
+    <div class="row row-location">
+        <div class="col-md-8">
+            <div class="sign-in-info">
+                <div class="logo-panel m-b">
+                    <h1 class="logo-text">${config.siteName!}-后台管理系统</h1>
+                    <input id="type" type="hidden" value="">
+                </div>
+                <div class="m-b"></div>
+                <h4>欢迎使用</h4>
+            </div>
+            <div class="login-img">
+                <img src="/admin/images/lbg1.jpg" class="login-img-style"/>
+                <img src="/admin/images/lbg2.jpg" class="login-img-style"/>
+                <img src="/admin/images/lbg3.jpg" class="login-img-style"/>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <form class="login-form form-group" role="form">
+                <h4 class="no-margins font-style">用户登录</h4>
+                <!--<p class="m-t-md">欢迎使用</p>-->
+                <input type="text" id="username" name="username" class="form-control username" placeholder="用户名" />
+                <input type="password" id="password" name="password" class="form-control password m-b" autocomplete="off" placeholder="密码"  />
+                <input type="text" id="captcha" name="captcha" class="form-control captcha" placeholder="" autocomplete="off" /><a href="javascript:void(0);" onclick="changeCaptcha();" class="captcha-img"><img src="" /></a>
+                <span id="error-info" class="error-info"></span>
+                <button id="btn-submit" class="btn btn-success btn-block" onclick="login()" type="button">登录</button>
+            </form>
+
+        </div>
+    </div>
+    <div class="sign-up-footer">
+        <div class="pull-left">
+            &copy; 2019 ${config.company!} 版权所有
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="/admin/assets/js/jquery.min.js?v=2.1.4"></script>
+<script src="/admin/assets/js/jquery.validate.js"></script>
+<script src="/admin/assets/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/admin/assets/js/canvas-nest.min.js"></script>
+<script src="/admin/assets/xcConfirm/xcConfirm.js"></script>
+
+<script  type="text/javascript">
+    $(document).ready(function() {
+        changeCaptcha();
+
+        $(".login-form").validate({
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 2
+                },
+                password: {
+                    required: true,
+                    minlength: 4
+                }
+            },
+            messages: {
+                username: {
+                    required: "请输入用户名",
+                    minlength: "用户名至少2位字符"
+                },
+                password: {
+                    required: "请输入密码",
+                    minlength: "密码至少4位字符"
+                }
+            },
+            errorClass: 'error-info',
+            errorPlacement: function(error, element) {
+                wrap = element.parent();
+                wrap1 = wrap.parent();
+                if (wrap1.hasClass('checkbox')) {
+                    error.insertAfter(wrap1);
+                } else {
+                    if (element.attr('type')=='file') {
+                        error.insertAfter(element.next());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            }
+        });
+
+        $("#username").val(getCookie('adminUsername'));
+    });
+
+    function changeCaptcha(){
+        var captchaUrl = "/${ad!}/captcha/"+Math.round(Math.random()*1e17)+"${ext!}";
+        $(".captcha-img img").attr("src", captchaUrl);
+    }
+
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+
+        if(arr=document.cookie.match(reg))
+
+            return unescape(arr[2]);
+        else
+            return null;
+    }
+
+    function keyLogin(){
+        if(event.keyCode == "13"){
+            $("#btn-submit").click();
+        }
+    }
+
+    function login() {
+        var url ="/${ad!}/doLogin${ext!}";
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var captcha = $("#captcha").val();
+
+        if(!checkParam(username,password)){
+            window.wxc.xcConfirm("请先输入用户名和密码。", window.wxc.xcConfirm.typeEnum.info);
+            return false;
+        }
+
+        if(!captcha || captcha === ""){
+            window.wxc.xcConfirm("请输入验证码。", window.wxc.xcConfirm.typeEnum.info);
+            return false;
+        }
+
+        $.ajax({
+            type: "post",
+            url: url,
+            data:$(".login-form").serialize(),
+            success: function (data) {
+                if(data.code === "success"){
+                    window.location.href = "/${ad!}/index${ext!}";
+                }else{
+                    $("#error-info").html(data.message);
+                    changeCaptcha();
+                }
+            },
+            error: function () {
+                $("#error-info").html("网络错误");
+                changeCaptcha();
+            }
+        });
+    }
+
+    function checkParam(username,password) {
+        if(Object.prototype.toString.call(username) === '[object String]' &&
+            username.length>1 && Object.prototype.toString.call(password) === '[object String]' &&
+            password.length>3){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function errorInfoAutoClose() {
+        setTimeout(function () {
+            $("#error-info").fadeOut(1000);
+        }, 1000);
+    }
+</script>

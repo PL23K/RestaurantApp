@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>退回消费 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+</head>
+<body>
+    <form action="/${ad!}/doRejectConsume${ext!}" name="modifyForm" id="modifyForm" method="post">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="items row">
+                <#if message??>
+                    <div class="col-sm-12 m-b">
+                        <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                            ${message!}
+                        </div>
+                    </div>
+                </#if>
+                <dl class="col-sm-12">
+                    <dt>核对</dt>
+                    <dd>
+                        <#if modify??>
+                            <input type="hidden" value="${modify.id!}" name="id">
+                        </#if>
+                        <span class="kong"></span>
+                        <span class="Validform_checktip Validform_wrong">您是否确定回退 ${modify.getMemberRealName()!}[<code>${modify.getMemberUsername()!}</code>]的${((item.totalMoney)!(0.00))?string(',##0.00')}元消费。</span>
+                    </dd>
+                </dl>
+
+            <dl class="col-sm-12">
+                <dt>填写备注</dt>
+                <dd>
+                    <textarea class="input normal" rows="5" style="width: 300px;" name="remark"></textarea>
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong">可选  </span>
+                </dd>
+            </dl>
+                <dl class="col-sm-12">
+                    <dt></dt>
+                    <dd>
+                        <button class="btn btn-success" type="submit">提交保存</button>
+                        <input type="button" value="返回" class="btn btn-default" onclick="goback()">
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    $(function () {
+        $(".hintIcon").mouseover(function () {
+            $(this).next(".hintTxt").fadeIn();
+        }).mouseout(function () {
+            $(this).next(".hintTxt").fadeOut();
+        });
+    });
+
+    function goback(){
+        window.location = "/${ad!}/consumeList${ext!}";
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

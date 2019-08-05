@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>添加/编辑员工 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" type="text/css" href="/admin/assets/css/plugins/webuploader/webuploader.css">
+    <style type="text/css">
+        .modifyPicture{
+            display: inline-block;
+            height: 50px;
+            margin-left: 40px;
+        }
+        #pictureUploader{
+            width: 160px;
+            display: inline-block;
+        }
+        #pictureUploader  .webuploader-pick {
+            position: relative;
+            font-size: 16px;
+            background: #00b7ee;
+            border-radius: 3px;
+            line-height: 34px;
+            padding: 0 10px;
+            color: #fff;
+            display: inline-block;
+            cursor: pointer;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+            margin-left: 26px;
+        }
+    </style>
+</head>
+<body>
+    <form action="/${ad!}/doAddWorker${ext!}" name="modifyForm" id="modifyForm" method="post">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="items row">
+                <#if message??>
+                    <div class="col-sm-12 m-b">
+                        <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                            ${message!}
+                        </div>
+                    </div>
+                </#if>
+            <dl class="col-sm-12">
+                <dt>用户名</dt>
+                <dd>
+                    <#if modify??>
+                    <input type="hidden" value="${modify.id!}" name="worker.id">
+                </#if>
+                    <input class="input normal <#if modify??>readonly</#if>" <#if modify??>readonly</#if> type="text" name="worker.username" value="<#if modify??>${modify.username!}</#if>">
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong">不少于4位数</span>
+                </dd>
+            </dl>
+            <dl class="col-sm-12">
+                <dt>密码</dt>
+                <dd>
+                    <input class="input normal" type="text" name="worker.password" value="">
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong">不少于6位数。<#if modify??>留空表示不修改</#if></span>
+                </dd>
+            </dl>
+                <dl class="col-sm-12">
+                    <dt>姓名</dt>
+                    <dd>
+                        <input class="input normal" type="text" name="worker.realName" value="<#if modify??>${modify.realName!}</#if>">
+                        <span class="kong"></span>
+                        <span class="Validform_checktip Validform_wrong"> </span>
+                    </dd>
+                </dl>
+        <dl class="col-sm-12">
+            <dt>所在店铺</dt>
+            <dd>
+                <select name="worker.shopId" class="form-control form-item">
+                    <option value="0"
+                    <#if modify?? && modify.shopId=0>
+                    selected="selected"
+                </#if>
+                >无</option>
+                    <#list shopList as item>
+                    <option value="${item.id}"
+                    <#if modify?? && modify.shopId=item.id>
+                    selected="selected"
+                </#if>
+                >${item.name!}</option>
+            </#list>
+            </select>
+            <span class="kong"></span>
+            <span class="Validform_checktip Validform_wrong"></span>
+            </dd>
+        </dl>
+        <dl class="col-sm-12">
+            <dt>提成比例</dt>
+            <dd>
+                <input class="input normal" type="text" name="worker.royaltyRate" value="<#if modify??>${modify.royaltyRate!}</#if>">
+                <span class="kong"></span>
+                <span class="Validform_checktip Validform_wrong">提成百分比 </span>
+            </dd>
+        </dl>
+            <dl class="col-sm-12">
+                <dt>是否启用</dt>
+                <dd>
+                    <div class="switch cell-block">
+                        <div class="onoffswitch">
+                            <input type="checkbox" <#if modify??&& (modify.isActive)>checked</#if> value="true" class="onoffswitch-checkbox" id="isActive" name="worker.isActive">
+                        <label class="onoffswitch-label" for="isActive">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+        </div>
+        <div class="cell-block">
+            <span class="kong"></span>
+            <span class="Validform_checktip Validform_wrong"> 停用后，员工将无法登录</span>
+        </div>
+        </dd>
+        </dl>
+        <dl class="col-sm-12">
+            <dt>头像：</dt>
+            <dd>
+                <input type="hidden" id="picture" value="" name="worker.avatar">
+                <div id="pictureUploader">
+                    <div class="queueList">
+                        <div id="pictureFilePicker"></div>
+                    </div>
+                </div>
+                <span class="kong"></span>
+                <span class="Validform_checktip Validform_wrong">不超过300K </span>
+                <#if modify?? && modify.avatar??>
+                <div class="modifyPicture"><img src="${modify.avatar}" height="100%"/></div>
+            </#if>
+            </dd>
+        </dl>
+            <dl class="col-sm-12">
+                <dt>性别</dt>
+                <dd>
+                    <select name="worker.sex" class="form-control form-item">
+                        <option value="true"
+                        <#if modify?? && modify.sex>
+                        selected="selected"
+                    </#if>
+                    >男</option>
+                    <option value="false"
+                    <#if modify?? && !(modify.sex)>
+                    selected="selected"
+                </#if>
+                >女</option>
+                </select>
+                <span class="kong"></span>
+                <span class="Validform_checktip Validform_wrong"> </span>
+                </dd>
+            </dl>
+            <dl class="col-sm-12">
+                <dt>入职时间</dt>
+                <dd>
+                    <input class="input normal" type="text" name="worker.workAddTime" value="<#if modify??>${modify.workAddTime!}</#if>">
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong"> 格式： 2019-01-01</span>
+                </dd>
+            </dl>
+        <dl class="col-sm-12">
+            <dt>生日</dt>
+            <dd>
+                <input class="input normal" type="text" name="worker.birthday" value="<#if modify??>${modify.birthday!}</#if>">
+                <span class="kong"></span>
+                <span class="Validform_checktip Validform_wrong"> 格式： 2019-01-01</span>
+            </dd>
+        </dl>
+            <dl class="col-sm-12">
+                <dt>电话</dt>
+                <dd>
+                    <input class="input normal" type="text" name="worker.phone" value="<#if modify??>${modify.phone!}</#if>">
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong">可选 </span>
+                </dd>
+            </dl>
+        <dl class="col-sm-12">
+            <dt>地址</dt>
+            <dd>
+                <input class="input normal" type="text" name="worker.address" value="<#if modify??>${modify.address!}</#if>">
+                <span class="kong"></span>
+                <span class="Validform_checktip Validform_wrong">可选 </span>
+            </dd>
+        </dl>
+                <dl class="col-sm-12">
+                    <dt></dt>
+                    <dd>
+                        <button class="btn btn-success" type="submit">提交保存</button>
+                        <input type="button" value="返回" class="btn btn-default" onclick="goback()">
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<!-- Web Uploader -->
+<script type="text/javascript">
+    // 添加全局站点信息
+    var BASE_URL = '/admin/assets/js/plugins/webuploader';
+</script>
+<script src="/admin/assets/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="/admin/assets/js/webuploader-picture-upload.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".hintIcon").mouseover(function () {
+            $(this).next(".hintTxt").fadeIn();
+        }).mouseout(function () {
+            $(this).next(".hintTxt").fadeOut();
+        });
+    });
+
+    function goback(){
+        window.location = "/${ad!}/workerList${ext!}";
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

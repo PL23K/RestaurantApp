@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>充值列表 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <#if !(info??)>
+        <div class="alert alert-danger alert-middle">
+            <span class="fa fa-warning"></span>
+            <strong>数据错误!</strong>&nbsp;&nbsp;请联系管理员或者重试 。
+        </div>
+</div>
+</body>
+</html>
+${info}
+</#if>
+    <div class="item categoryCon row">
+        <#if message??>
+            <div class="col-sm-12 m-b">
+                <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    ${message!}
+                </div>
+            </div>
+        </#if>
+        <div class="col-sm-12 m-b">
+            <div class="alert alert-dismissable alert-info ">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                <span class="ml-15"> 提示：每笔充值都会根据当时的提成比例计算提成金额 </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 m-b">
+                <div class="col-sm-4">
+                    <form action="/${ad!}/recharegeOrderList${ext!}" method="post" id="searchForm">
+                        <div class="input-group m-b">
+                            <div class="input-group-btn">
+                                <div class="btn-group">
+                                    <button id="searchSelect" data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false">充值者用户名 <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="searchSelectItem" href="javascript:void(0);" data-id="1" data-name="充值者用户名">充值者用户名</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <input id="searchType" name="searchType" value="${info.searchType!"1"}" type="hidden">
+                            <input class="form-control" name="searchKey" placeholder=" " <#if info.searchKey?? > value="${info.searchKey!}"</#if>>
+                        <a class="input-group-addon btn btn-primary" href="javascript:void(0);" onclick="$('#searchForm').submit();">搜索</a>
+                </div>
+                </form>
+            </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                            <table class="table table-striped table-hover centerTableStyle">
+                                <thead>
+                                <tr>
+                                <th>序号</th>
+                                <th>用户</th>
+                                <th>类型</th>
+                                <th>订单编号</th>
+                                <th>状态</th>
+                                <th>充值金额</th>
+                                <th>实付金额</th>
+                                <th>赠送金额</th>
+                                    <th>已赠送</th>
+                                <th>充值活动</th>
+                                <th>引导员</th>
+                                <th>引导员提成</th>
+                                <th style="max-width: 400px;">备注</th>
+                                <th>充值时间</th>
+                                    <th>照片</th>
+                                <th >操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <#if (info.page.getList())?? && info.page.getList().size() gt 0>
+                                    <#list info.page.getList() as item>
+                                        <tr>
+                                            <td >
+                                                ${item.id!}
+                                            </td>
+                                            <td >
+                                                ${item.getMemberRealName()!}[<code>${item.getMemberUsername()!}</code>]
+                                            </td>
+                                            <td>${item.getTypeName()!}</td>
+                                            <td>${item.orderId!}</td>
+                                            <td>
+                                                <#if item.status = 0>
+                                                <span class="label">未付款</span>
+                                                <#elseif item.status = 1>
+                                                <span class="label label label-warning">付款中</span>
+                                                <#elseif item.status = 2>
+                                                <span class="label label-primary">已付款</span>
+                                                <#elseif item.status = 3>
+                                                <span class="label label-success">已完成</span>
+                                                <#else>
+                                                未知
+                                            </#if>
+                                            </td>
+                                            <td>
+                                                <code>${((item.money)!(0.00))?string(',##0.00')}</code>
+                                            </td>
+                                            <td>
+                                                <code>${((item.payMoney)!(0.00))?string(',##0.00')}</code>
+                                            </td>
+                                            <td>
+                                                <code>${((item.returnMoney)!(0.00))?string(',##0.00')}</code>
+                                            </td>
+                                            <td>
+                                                <#if item.isPayPromotion>
+                                                <span class="label label-primary">已送</span>
+                                                <#else>
+                                                <span class="label">未送</span>
+                                            </#if>
+                                            </td>
+                                            <td>
+                                                <code>${item.getPromotionName()!"无"}</code>
+                                            </td>
+                                            <td>
+                                                ${item.getRecommendText()!}
+                                            </td>
+                                            <td>${item.royaltyRate!'0'}%</td>
+                                            <td  style="max-width: 400px;">${item.remark!}</td>
+                                            <td>
+                                                ${item.addTime?date}
+                                            </td>
+                                            <td>
+                                                <a href="${item.evidence!}" target="_blank"><img src="${item.evidence!}" style="height: 40px;"/></a>
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                    <#else>
+                                        <tr><td colspan="16" >暂无记录</td></tr>
+                                </#if>
+                                </tbody>
+                            </table>
+                            <div class="separator"></div>
+                            <div class="row">
+                                <div class="col-sm-12 text-right">
+                                    <#include "/admin/common/Paginate.fmk" />
+                                    <@paginate currentPage=info.page.getPageNumber()
+                                    totalPage=info.page.getTotalPage() sizePage=info.page.getPageSize()
+                                    totalRow=info.page.getTotalRow() actionUrl="/${ad!}/rechargeOrderList"
+                                    ext = ext
+                                    urlParas="-${info.searchType!'n1'}-${info.searchKey!''}-${info.startTime!''}-${info.endTime!''}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    $(function () {
+
+    });
+
+    $(".searchSelectItem").click(function () {
+        var ele = $(this);
+        $("#searchType").val(ele.attr("data-id"));
+        $("#searchSelect").html(ele.attr("data-name")+" <span class=\"caret\"></span>");
+    });
+
+    function showMsg(msg){
+        parent.layer.msg(msg);
+    }
+
+    function deleteItem(obj){
+        //询问框
+        var deleteEle = $(obj);
+        parent.layer.confirm('确定要删除该记录吗？', {
+            btn: ['确定','取消'], //按钮
+            shade: [0.2,'#000']
+        }, function(){
+            parent.layer.close(parent.layer.index);
+            //删除
+            window.location = deleteEle.attr("data-url");
+        }, function(){
+        });
+        return false;
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

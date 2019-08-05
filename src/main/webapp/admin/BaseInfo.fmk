@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>基础信息 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+</head>
+<body>
+<form action="/${ad!}/doModifyBaseInfo${ext!}" name="modifyForm" id="modifyForm" method="post">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="items row">
+            <#if message??>
+            <div class="col-sm-12 m-b">
+                <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    ${message!}
+                </div>
+            </div>
+        </#if>
+        <fieldset class="line-title"><legend>网站相关设置</legend></fieldset>
+        <dl class="col-sm-12">
+            <dt>网站名称</dt>
+            <dd>
+                <input type="hidden" name="config.id" value="${config.id!}">
+                <input class="input normal" type="text" value="${config.siteName!}" name="config.siteName">
+                <span class="kong"></span>
+                <p class="hintIcon fa fa-question-circle"></p>
+                <p class="hintTxt nameHint">
+                    网站对外显示的名称
+                </p>
+            </dd>
+        </dl>
+        <dl class="col-sm-12">
+            <dt>网站地址</dt>
+            <dd>
+                <input class="input normal" type="text" value="${config.siteUrl!}" name="config.siteUrl">
+                <span class="kong"></span>
+                <p class="hintIcon fa fa-question-circle"></p>
+                <p class="hintTxt nameHint">
+                    请以http开头
+                </p>
+            </dd>
+        </dl>
+        <dl class="col-sm-12">
+            <dt>开启网站</dt>
+            <dd>
+                <div class="switch cell-block">
+                    <div class="onoffswitch">
+                        <input type="checkbox" <#if config.isActive>checked</#if> value="true" class="onoffswitch-checkbox" id="isActive" name="config.isActive">
+                    <label class="onoffswitch-label" for="isActive">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="cell-block">
+                <span class="kong"></span>
+                <span class="Validform_checktip Validform_wrong"> 网站关闭后，所有链接将显示“正在维护中”！ </span>
+            </div>
+            </dd>
+        </dl>
+    <dl class="col-sm-12">
+        <dt>备案号</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.record!}" name="config.record">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                填入完整备案号
+            </p>
+        </dd>
+    </dl>
+    <dl class="col-sm-12">
+        <dt>公司名称</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.company!}" name="config.company">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                对外显示的公司名称
+            </p>
+        </dd>
+    </dl>
+    <dl class="col-sm-12">
+        <dt>联系方式</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.phone!}" name="config.phone">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                填写客服电话，用于客户主动联系你
+            </p>
+        </dd>
+    </dl>
+    <dl class="col-sm-12">
+        <dt>电子邮箱</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.email!}" name="config.email">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                填写客服邮箱，用于客户主动联系你
+            </p>
+        </dd>
+    </dl>
+    <dl class="col-sm-12">
+        <dt>公司地址</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.address!}" name="config.address">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                公司地址省市县街道门号
+            </p>
+        </dd>
+    </dl>
+    <fieldset class="line-title"><legend>微信相关设置</legend></fieldset>
+    <dl class="col-sm-12">
+        <dt>微信APPID</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.wxAppId!}" name="config.wxAppId">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                从微信公众平台获取
+            </p>
+        </dd>
+    </dl>
+    <dl class="col-sm-12">
+        <dt>微信APP秘钥</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.wxAppSecret!}" name="config.wxAppSecret">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                从微信公众平台获取
+            </p>
+        </dd>
+    </dl>
+    <dl class="col-sm-12">
+        <dt>微信用户信息回调</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.wxUserInfoCall!}" name="config.wxUserInfoCall">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                需使用url编码拼接
+            </p>
+        </dd>
+    </dl>
+    <dl class="col-sm-12">
+        <dt>微信登录链接</dt>
+        <dd>
+            <input class="input normal" type="text" value="${config.wxLoginUrl!}" name="config.wxLoginUrl">
+            <span class="kong"></span>
+            <p class="hintIcon fa fa-question-circle"></p>
+            <p class="hintTxt nameHint">
+                需使用url编码拼接
+            </p>
+        </dd>
+    </dl>
+    <dl class="col-sm-12">
+        <dt></dt>
+        <dd>
+            <button class="btn btn-success" type="submit">提交保存</button>
+        </dd>
+    </dl>
+</div>
+</div>
+</form>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    $(function () {
+        $(".hintIcon").mouseover(function () {
+            $(this).next(".hintTxt").fadeIn();
+        }).mouseout(function () {
+            $(this).next(".hintTxt").fadeOut();
+        });
+    });
+</script>
+<!-- /JAVASCRIPTS -->
+

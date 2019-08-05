@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>添加/编辑管理员 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+</head>
+<body>
+    <form action="/${ad!}/doAddAdmin/${self!}${ext!}" name="modifyForm" id="modifyForm" method="post">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="items row">
+                <#if message??>
+                    <div class="col-sm-12 m-b">
+                        <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                            ${message!}
+                        </div>
+                    </div>
+                </#if>
+                <dl class="col-sm-12">
+                    <dt>管理员用户名</dt>
+                    <dd>
+                        <#if modifyAdmin??>
+                            <input type="hidden" value="${modifyAdmin.id!}" name="admin.id">
+                        </#if>
+                        <input class="input normal" type="text" name="admin.username" value="<#if modifyAdmin??>${modifyAdmin.username!}</#if>" required>
+                        <span class="kong"></span>
+                        <span class="Validform_checktip Validform_wrong">不可少于6个字符  </span>
+                    </dd>
+                </dl>
+            <dl class="col-sm-12">
+                <dt>密码</dt>
+                <dd>
+                    <input class="input normal" type="text" name="admin.password" value="">
+                    <span class="kong"></span>
+                    <span class="Validform_checktip Validform_wrong">不可少于6个字符。 不修改时可留空</span>
+                </dd>
+            </dl>
+                <dl class="col-sm-12">
+                    <dt>昵称</dt>
+                    <dd>
+                        <input class="input normal" type="text" name="admin.realName" value="<#if modifyAdmin??>${modifyAdmin.realName!}</#if>" required>
+                        <span class="kong"></span>
+                        <span class="Validform_checktip Validform_wrong">不可少于2个字符  </span>
+                    </dd>
+                </dl>
+                <dl class="col-sm-12">
+                    <dt>角色</dt>
+                    <dd>
+                        <select name="admin.role" class="form-control form-item">
+                            <option value="0"
+                            <#if modifyAdmin?? && modifyAdmin.role=0>
+                                selected="selected"
+                            </#if>
+                            >超级管理员</option>
+                            <option value="1"
+                            <#if modifyAdmin?? && modifyAdmin.role=1>
+                                selected="selected"
+                            </#if>
+                            >店铺管理员</option>
+                        </select>
+                        <span class="kong"></span>
+                        <span class="Validform_checktip Validform_wrong">超级管理员：可修改系统配置与店铺。 店铺管理员：只可以管理指定店铺，不可查看和修改配置 </span>
+                    </dd>
+                </dl>
+            <dl class="col-sm-12">
+                <dt>管理店铺</dt>
+                <dd>
+                    <select name="admin.shopId" class="form-control form-item">
+                        <option value="0"
+                        <#if modifyAdmin?? && modifyAdmin.shopId=0>
+                        selected="selected"
+                    </#if>
+                    >无</option>
+                    <#list shopList as item>
+                    <option value="${item.id}"
+                    <#if modifyAdmin?? && modifyAdmin.shopId=item.id>
+                    selected="selected"
+                </#if>
+                >${item.name!}</option>
+            </#list>
+            </select>
+            <span class="kong"></span>
+            <span class="Validform_checktip Validform_wrong">超级管理员不需要配置所属店铺 </span>
+            </dd>
+            </dl>
+                <dl class="col-sm-12">
+                    <dt>手机</dt>
+                    <dd>
+                        <input class="input normal" type="text" name="admin.phone" value="<#if modifyAdmin??>${modifyAdmin.phone!}</#if>">
+                        <span class="kong"></span>
+                        <span class="Validform_checktip Validform_wrong">可选  </span>
+                    </dd>
+                </dl>
+                <dl class="col-sm-12">
+                    <dt>email</dt>
+                    <dd>
+                        <input class="input normal" type="text" name="admin.email" value="<#if modifyAdmin??>${modifyAdmin.email!}</#if>">
+                        <span class="kong"></span>
+                        <span class="Validform_checktip Validform_wrong">可选  </span>
+                    </dd>
+                </dl>
+                <dl class="col-sm-12">
+                    <dt></dt>
+                    <dd>
+                        <button class="btn btn-success" type="submit">提交保存</button>
+                        <#if self!="self"><input type="button" value="返回" class="btn btn-default" onclick="goback()"></#if>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    $(function () {
+        $(".hintIcon").mouseover(function () {
+            $(this).next(".hintTxt").fadeIn();
+        }).mouseout(function () {
+            $(this).next(".hintTxt").fadeOut();
+        });
+    });
+
+    function goback(){
+        window.location = "/${ad!}/adminList${ext!}";
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

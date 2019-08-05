@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>消费列表 - ${config.siteName!}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <#include "/admin/common/Assets.fmk" />
+    <@assets />
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <#if !(info??)>
+        <div class="alert alert-danger alert-middle">
+            <span class="fa fa-warning"></span>
+            <strong>数据错误!</strong>&nbsp;&nbsp;请联系管理员或者重试 。
+        </div>
+</div>
+</body>
+</html>
+${info}
+</#if>
+    <div class="item categoryCon row">
+        <#if message??>
+            <div class="col-sm-12 m-b">
+                <div class="alert alert-dismissable <#if code?? && code='success'>alert-success<#else>alert-danger</#if> ">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    ${message!}
+                </div>
+            </div>
+        </#if>
+        <div class="col-sm-12 m-b">
+            <div class="alert alert-dismissable alert-info ">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                <span class="ml-15"> 提示：每笔消费都会记录应付金额、实付金额、折扣 </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 m-b">
+                <div class="col-sm-4">
+                    <form action="/${ad!}/consumeList${ext!}" method="post" id="searchForm">
+                        <div class="input-group m-b">
+                            <div class="input-group-btn">
+                                <div class="btn-group">
+                                    <button id="searchSelect" data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false">用户名 <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="searchSelectItem" href="javascript:void(0);" data-id="1" data-name="用户名">用户名</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <input id="searchType" name="searchType" value="${info.searchType!"1"}" type="hidden">
+                            <input class="form-control" name="searchKey" placeholder=" " <#if info.searchKey?? > value="${info.searchKey!}"</#if>>
+                        <a class="input-group-addon btn btn-primary" href="javascript:void(0);" onclick="$('#searchForm').submit();">搜索</a>
+                </div>
+                </form>
+            </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                            <table class="table table-striped table-hover centerTableStyle">
+                                <thead>
+                                <tr>
+                                <th>序号</th>
+                                <th>用户</th>
+                                <th>应付金额</th>
+                                    <th>实付金额</th>
+                                    <th>折扣</th>
+                                <th>小票照片</th>
+                                <th>状态</th>
+                                <th>退回员</th>
+                                    <th style="max-width: 400px;">备注</th>
+                                <th>消费时间</th>
+                                <th >操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <#if (info.page.getList())?? && info.page.getList().size() gt 0>
+                                    <#list info.page.getList() as item>
+                                        <tr>
+                                            <td >
+                                                ${item.id!}
+                                            </td>
+                                            <td >
+                                                ${item.getMemberRealName()!}[<code>${item.getMemberUsername()!}</code>]
+                                            </td>
+                                            <td><code>${((item.totalMoney)!(0.00))?string(',##0.00')}</code></td>
+                                            <td><code>${((item.payTotalMoney)!(0.00))?string(',##0.00')}</code>[现金<code>${((item.money)!(0.00))?string(',##0.00')}</code>抵券<code>${((item.coin)!(0.00))?string(',##0.00')}</code>]</td>
+                                            <td>${item.discount!} %</td>
+                                            <td>
+                                                <a href="${item.evidence!}" target="_blank"><img src="${item.evidence!}" style="height: 40px;"/></a>
+                                            </td>
+                                            <td>
+                                                <#if item.status = 0>
+                                                <span class="badge badge-primary">完成</span>
+                                                <#else>
+                                                <span class="badge badge-danger">退回</span>
+                                            </#if>
+                                            </td>
+                                            <td>
+                                                ${item.getRejectRealName()!}[<code>${item.getRejectUsername()!}</code>]
+                                            </td>
+                                            <td style="max-width: 400px;">
+                                                ${item.remark!}
+                                            </td>
+                                            <td>
+                                                ${item.addTime?date}
+                                            </td>
+                                            <td>
+                                                <#if item.status = 0><a href="/${ad!}/rejectConsume/${item.id!}${ext!}" >退回</a>&nbsp;&nbsp;</#if>
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                    <#else>
+                                        <tr><td colspan="11" >暂无记录</td></tr>
+                                </#if>
+                                </tbody>
+                            </table>
+                            <div class="separator"></div>
+                            <div class="row">
+                                <div class="col-sm-12 text-right">
+                                    <#include "/admin/common/Paginate.fmk" />
+                                    <@paginate currentPage=info.page.getPageNumber()
+                                    totalPage=info.page.getTotalPage() sizePage=info.page.getPageSize()
+                                    totalRow=info.page.getTotalRow() actionUrl="/${ad!}/consumeList"
+                                    ext = ext
+                                    urlParas="-${info.searchType!'n1'}-${info.searchKey!''}-${info.startTime!''}-${info.endTime!''}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- JAVASCRIPTS -->
+<#include "/admin/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    $(function () {
+
+    });
+
+    $(".searchSelectItem").click(function () {
+        var ele = $(this);
+        $("#searchType").val(ele.attr("data-id"));
+        $("#searchSelect").html(ele.attr("data-name")+" <span class=\"caret\"></span>");
+    });
+
+    function showMsg(msg){
+        parent.layer.msg(msg);
+    }
+
+    function deleteItem(obj){
+        //询问框
+        var deleteEle = $(obj);
+        parent.layer.confirm('确定要删除该记录吗？', {
+            btn: ['确定','取消'], //按钮
+            shade: [0.2,'#000']
+        }, function(){
+            parent.layer.close(parent.layer.index);
+            //删除
+            window.location = deleteEle.attr("data-url");
+        }, function(){
+        });
+        return false;
+    }
+</script>
+<!-- /JAVASCRIPTS -->
+

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>操作提示 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/jump.css">
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">${title!"操作错误"}</h2>
+            <p class="weui-msg__desc">${content!"请返回重试"}</p>
+        </div>
+        <div class="weui-msg__extra-area">
+            <div class="weui-footer">
+                <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+</html>

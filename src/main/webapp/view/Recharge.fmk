@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>充值 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/profile.css">
+    <script type="text/javascript">
+        function checkWechartVersion() {
+            var wechatInfo = navigator.userAgent.match(/MicroMessenger\/([\d\.]+)/i);
+            if( !wechatInfo ){
+                return true;
+            }else if ( wechatInfo[1] < "5.0" ){
+                return true;
+            }else{
+                return true;
+            }
+        }
+    </script>
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+
+<div class="wrapper">
+    <header class="hy-header">
+        <a href="/"> <h1 class="hy-title">充值</h1 > </a>
+    </header>
+    <form method="post" action="/doRecharge${ext!}" name="modify" id="modify"  onsubmit="return false;">
+        <div class="weui-cells__title">第一步：选择门店</div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" name="shopId">
+                    <#if info.shopList?? && info.shopList.size() gt 0>
+                    <#list info.shopList as item>
+                    <option <#if item.id=info.lastShopId>selected="selected"</#if> value="${item.id}">${item.name}</option>
+                    </#list>
+                    <#else>
+                <option selected="selected" value="0">无</option>
+                </#if>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cells__title mT1">第二步：选择面值</div>
+        <div class="weui-cells weui-cells_radio">
+            <#if info.rechargeList?? && info.rechargeList.size() gt 0>
+                <#list info.rechargeList as item>
+                    <label class="weui-cell weui-check__label" for="x${item.id!}">
+                        <div class="weui-cell__bd">
+                            <p>${item.get("充值")!}元 <span class="tip">赠送${item.get("返现金额")!}元</span></p>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <input type="radio" class="weui-check" name="rechargeId" value="${item.id}" id="x${item.id!}" <#if !(item_has_next)>checked="checked"</#if>>
+                            <span class="weui-icon-checked"></span>
+                        </div>
+                    </label>
+                </#list>
+            <#else>
+            <label class="weui-cell weui-check__label" for="x0">
+                <div class="weui-cell__bd">
+                    <p>无法充值</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="rechargeId" id="x0">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            </#if>
+        </div>
+
+        <div class="weui-cells__title mT1">第三步：选择店员</div>
+        <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">店员编号</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" value="${info.inviteCode!}" name="inviteCode" id="inviteCode" placeholder="可选">
+            </div>
+        </div>
+        </div>
+        <div class="button-box">
+            <button type="button" class="weui-btn weui-btn_primary" id="recharge">提交</button>
+        </div>
+    </form>
+<div class="text-center" style="font-size: 12px;color: darksalmon">由于网络原因，付款成功后到账有可能延迟</div>
+    <div class="weui-loadmore weui-loadmore_line">
+        <span class="weui-loadmore__tips">充值历史</span>
+    </div>
+    <div class="weui-cells">
+        <#if info.rechargeOrderList?? && info.rechargeOrderList.size() gt 0>
+        <#list info.rechargeOrderList as item>
+        <a class="weui-cell weui-cell_access" href="javascript:;" <#if item.status!=3>onclick="recharge('${item.id}');"</#if>>
+            <div class="weui-cell__bd">
+                <p>${(item.money)?string(',##0.00')}元 <#if item.promotion=2>赠送活动[消费可返现金]<#elseif item.promotion=1>返现活动[指定时间入账]<#elseif item.promotion=3>商场活动[赠送金抵扣]</#if></p>
+            </div>
+            <div class="weui-cell__ft"><#if item.status==3>已完成<#else><span style="color: #f00;">去支付</span></#if></div>
+        </a>
+        </#list>
+        <#else>
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div style="width:100%;text-align: center">
+               无
+            </div>
+        </a>
+        </#if>
+    </div>
+</div>
+<div class="footer" >
+    <div class="weui-footer">
+        <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+<script type="text/javascript">
+    var param = new Object();
+    $(document).ready(function(){
+        $("#recharge").click(function () {
+            if(checkWechartVersion()){
+                $.ajax({
+                    type: "POST",
+                    url: $('#modify').attr("action"),
+                    async: true,
+                    beforeSend: function () {
+                        $(".loading_process").show();
+                    },
+                    data: $('#modify').serialize(),
+                    success: function (msg) {
+                        $(".loading_process").hide();
+                        if (typeof(msg) !== "object") {
+                            $.toast("网络错误", "cancel");
+                        }else if(msg.code == "0"){
+                            param = msg.data;
+                            //处理微信支付
+                            $(".loading_process").show();
+                            if (typeof WeixinJSBridge == "undefined"){
+                                if( document.addEventListener ){
+                                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                                }else if (document.attachEvent){
+                                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                                }
+                            }else{
+                                onBridgeReady();
+                            }
+                        }else{
+                            $.toast(msg.message,"cancel");
+                        }
+                    },
+                    error:function (request,msg,e) {
+                        $(".loading_process").hide();
+                        if (msg === null) {
+                            $.toast("网络连接失败", "cancel");
+                        }else{
+                            $.toast(msg, "cancel");
+                        }
+                    }
+                });
+            }else{
+                $.toast("请在微信5.0以上版本中进行操作", "cancel");
+            }
+        });
+    });
+
+    function onBridgeReady(){
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', param,
+            function(res){
+                //alert(JSON.stringify(res));
+                if(res.err_msg == "get_brand_wcpay_request:ok" ){
+                    // 使用以上方式判断前端返回,微信团队郑重提示：
+                    //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                    self.location.href="/paySuccess?"+param.package;
+                }else{
+                    alert(res.err_desc);
+                    location.reload();
+                }
+            });
+    }
+
+    function recharge(id){
+        if(checkWechartVersion()){
+            $.ajax({
+                type: "POST",
+                url: "/doRechargeAgain/"+id,
+                async: true,
+                beforeSend: function () {
+                    $(".loading_process").show();
+                },
+                data: null,
+                success: function (msg) {
+                    $(".loading_process").hide();
+                    if (typeof(msg) !== "object") {
+                        $.toast("网络错误", "cancel");
+                    }else if(msg.code == "0"){
+                        param = msg.data;
+                        //处理微信支付
+                        $(".loading_process").show();
+                        if (typeof WeixinJSBridge == "undefined"){
+                            if( document.addEventListener ){
+                                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                            }else if (document.attachEvent){
+                                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                            }
+                        }else{
+                            onBridgeReady();
+                        }
+                    }else{
+                        $.toast(msg.message,"cancel");
+                    }
+                },
+                error:function (request,msg,e) {
+                    $(".loading_process").hide();
+                    if (msg === null) {
+                        $.toast("网络连接失败", "cancel");
+                    }else{
+                        $.toast(msg, "cancel");
+                    }
+                }
+            });
+        }else{
+            $.toast("请在微信5.0以上版本中进行操作", "cancel");
+        }
+    }
+
+</script>
+</html>

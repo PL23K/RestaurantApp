@@ -1,0 +1,10 @@
+cron4j=dailyTask,returnTask
+dailyTask.cron=0 1 * * *
+dailyTask.class=com.pl23k.restaurant.common.DailyTask
+dailyTask.daemon=true
+dailyTask.enable=true
+
+returnTask.cron=7 23 * * *
+returnTask.class=com.pl23k.restaurant.common.ReturnTask
+returnTask.daemon=true
+returnTask.enable=true

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>用户信息 - ${config.siteName!}</title>
+    <#include "/view/common/Assets.fmk" />
+    <@assets />
+    <link rel="stylesheet" href="/view/css/main.css">
+    <style type="text/css">
+        #back a:visited{
+            color: grey;
+        }
+    </style>
+</head>
+<body>
+<!--錯誤提示-->
+<#include "/view/common/InnerError.fmk" />
+<@innerError />
+<#include "/view/common/Loading.fmk" />
+<@loading />
+
+<div class="wrapper">
+    <div id="back" style="position: absolute;left:1rem;top:1rem;text-decoration: none;color: grey;"><a href="/worker${ext!}">返回</a></div>
+    <div >
+        <a href="javascript:void(0);" style="display: block;width: 5rem;margin: 1rem auto;">
+            <img  style="width: 5rem;    border-radius: 50%;" src="<#if info.user.avatar?length gt 0>${info.user.avatar}<#else>/view/images/login_logo.png</#if>" alt="">
+        </a>
+        <span style="line-height: 1.2rem;width: 100%;display: block;text-align: center;font-size: 1rem">
+            ${info.user.realName!}
+        </span>
+        <span style="line-height: 1rem;width: 100%;display: block;text-align: center;font-size: 0.8rem">
+            会员号 ${info.user.username!}
+        </span>
+        <span style="line-height: 1rem;width: 100%;display: block;text-align: center;font-size: 0.8rem">
+            VIP ${info.user.level!} 级
+        </span>
+        <div style="line-height: 1rem;width: 100%;display: block;text-align: center;font-size: 0.8rem">
+            <#if info.hasP1> <span style="color: #0bb20c">√活动一</span>&nbsp; <#else><span style="color: #999">×活动一</span> </#if>
+            <#if info.hasP2> <span style="color: #0bb20c">√活动二</span>&nbsp;  <#else><span style="color: #999">×活动二</span> </#if>
+            <#if info.hasP3> <span style="color: #0bb20c">√活动三</span> <#else><span style="color: #999">×活动三</span> </#if>
+        </div>
+    </div>
+
+    <h2 class="title1"><strong>总资产</strong></h2>
+    <h2 class="title2" style="font-size: 1.6rem">${(info.user.money+info.user.coin+info.returnMoney)?string(',##0.00')}</h2>
+    <h2 class="title3" style="font-size: 0.6rem">（充值：${(info.user.money)?string(',##0.00')}  &nbsp;&nbsp; 待入账：${(info.returnMoney)?string(',##0.00')} &nbsp;&nbsp; 赠送：${(info.user.coin)?string(',##0.00')}）</h2>
+
+    <div class="mT1" style="height: 1.5rem;"></div>
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="/worker/recharge/${info.user.username}${ext!}">
+            <div class="weui-cell__hd"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-money_transfer"></use></svg></div>
+            <div class="weui-cell__bd">
+                <p>充值操作</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="/worker/consume/${info.user.username}${ext!}">
+            <div class="weui-cell__hd"><img class="icon" src="/view/images/fasong-.png"/></div>
+            <div class="weui-cell__bd">
+                <p>消费操作</p>
+            </div>
+            <div class="weui-cell__ft">${info.st!}
+            </div>
+        </a>
+    </div>
+</div>
+<div class="footer" >
+    <div class="weui-footer">
+        <p class="weui-footer__text">${config.company!} &copy; 2019</p>
+    </div>
+</div>
+</body>
+<#include "/view/common/Js.fmk" />
+<@js />
+<script type="text/javascript" src="/view/assets/parallax.min.js"></script>
+<script type="text/javascript" src="/view/assets/iconfont/iconfont.js"></script>
+<script type="text/javascript" src="/view/js/main.js"></script>
+<script type="text/javascript">
+    $(function() {
+    });
+</script>
+</html>
